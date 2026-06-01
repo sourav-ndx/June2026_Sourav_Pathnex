@@ -1,0 +1,15 @@
+today's task:
+
+1. Attended the 1st live session With Neeraj Ji , where he walked su through the course curriculum and inspired us to dedicated towards the course and be through all lectures , daily tass and sessions to get the best resukts and make the most out of this course .
+
+2. Post session i went through the Youtube tutorial and did the following
+	a. Launed an EC2 isntance with Amazon Linux
+	b. created a new Github Repo for he course
+	c. generated new ssh keys for the ec2 instance
+	d. conencted the github repo with ec2 using the ssh keys
+
+tomorrow's task:
+
+1. Will start with Linux Session
+2. Basic Linux Instalaltion
+
