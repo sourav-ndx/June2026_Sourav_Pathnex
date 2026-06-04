@@ -1,0 +1,11 @@
+TODAY's TASK :
+
+
+Today was the day 4 of Linux Class 
+
+I learned the below tasks today
+
+How to perform live troubleshooting using TOP command :
+How it shows the resource sonsumption by different Process and it can be sued to detect and kill process
+
+And Imp topic was use of 
