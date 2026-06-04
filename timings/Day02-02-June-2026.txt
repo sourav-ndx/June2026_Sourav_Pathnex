@@ -1,0 +1,53 @@
+Day 2 :
+
+Today i am pushing this code after the 3rd class 
+
+
+Today class was mainly aound Linux with details learned like creation of keys , public and private , how the keys exchnage work and how we conenct form our local to Linux Systems running on AWS
+
+
+I practiced frequesntly used linux commands like 
+
+File manipulatons using TAR ZIP and GZIP
+
+Process management commands like  PS to see running processes  , TOP to see the resource sonsumption of process  &  KILL to kill specific process .
+
+File search using Grep and various parmaeters like -i Ignore case ,  -v Inverive match , -R for recursive  , -w match whole word , -c Count etc
+
+
+system  Infor commands like  UNAME , WHOAMI , df ofr disk usage , DU for file sizes in directory
+free for memeory usage  , UPTIME for showing from when sytem is running , LSCPU for displaying CPU info 
+
+
+Also tried some Netowrking commands like 
+
+Ifconfig to Display  info like IP of machine , PING to send ICMP packets , NETSTAT -tulnp or -anlp to identify processa nd port on TCP & UDP , ssh to lofin via secure shell , 
+WGET to downlaod files from web 
+CURL to get some data from a URL or IP 
+
+
+
+========================
+
+This is on the linux front some additional task i did was like write the provided yaml of ansible , terraform and KIbernetes and tried to undertand what each does with help of claude , what i understood was 
+
+Ansible - The Ansible YAML was written to login to all configured server and install the NGINX software in them  then the second module was there to start the Ansible yaml using required system parameters 
+
+Terraform : Understtod that it s=uses a scripting language called HCL and the script was written to connect to AWS and spin up an isntacne of a specific type using the specific AMI and on the location thatw as mentioned .
+
+Kubernetes : next was k8 manifest of a deployemnt which was wriiten to create two replica of pods having a contianer called APP in the pods and usd the nginx image
+
+Shell script : a small shell script was also there to print the disk usage of a server in hunman readable format .
+
+======================
+
+
+
+
+TOMORROWS WORK :
+
+
+FOr tomorrow we will most likely be moving to using and learningGIT in details and also push some codes on other ares in Gitlab
+
+
+================

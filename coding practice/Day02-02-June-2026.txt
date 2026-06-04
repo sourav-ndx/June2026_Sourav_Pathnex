@@ -1,0 +1,159 @@
+Day 02 - Service & Tag
+
+
+############################################################################
+
+Module 1 : Ansible Practice 
+
+Description: There are three parts to this playbook , 
+1st is Play header : this defines the overall goal , i.e installing Nginx on Pathnex servers
+
+2nd is the Task1 Section for APckage Installation: Here the action is named as Install Nginx , and the package is installed using YUM package manager , the software is named NGINX and STATE: present , which basically tells it to chekc if Nginx is present or not , if yes install no action if not Install it .
+
+3rs is TASK 2 Section : Service mAnagement :  Name is Enable Naginx , its uses the Built in Service manager like systemd or init.d , the state is STARTED to make sure NGINX is up and running , and ENABLED is YES so that NGINX remain running even after software restarts 
+
+-------------
+
+- name: Install and start Nginx on Pathnex Servers
+  host: all     #denotes all servers mentioned in the host file 
+  become: yes
+
+
+  task:
+    - name: Install Nginx
+      yum: 
+        name: nginx
+        state: present
+
+
+    - name: Enable nginx
+      service:
+         name: nginx
+         state: started
+         enabled: yes
+
+
+###########################################################################
+
+Module 2 : Terraform practice
+
+
+It used a declarative approach where desired final state is described and te
+rraform builds it .
+
+Block 1 : Provider Block : it deines the target Loud , i.e AWS in tis case ,
+ and the region as US-EAST-1
+
+Block 2 : Resoure : this defines the kind of resource we want to crrate in c
+loud and the name or tag we want to assign , here its EC2 instance named Pat
+hnexEC2
+
+Block 3 : COnfig Arguments : Here the AMI ( image type ) is defined and the Instance type is defined as r5.2xlarge
+
+AMI defines the combination of OS with pre required Softwares
+
+Block 4: Metadata tags
+
+tags are the key value pair or identity assigned to track or identify the re
+sources
+
+
+----------------------------------------------------
+provider "aws" {
+  region = "us-east-1"
+}
+
+resource "aws_instance" "PathnexEC2" {
+  ami           = "ami-0abcd1234abcd1234"
+  instance_type = "r5.2xlarge"
+
+  tags = {
+    Name        = "Pathnex-Server"
+    Environment = "Training"
+    Owner       = "PathnexStudent"
+  }
+}
+
+
+###########################################################################
+
+MODULE 3 : KUBERNETES 
+
+
+This Block denotes Kubernetes Deployment manifest YAML file , where a deployment is getting created with the folowing details 
+
+the Object type is Deployment
+Name of the deployment is pathnex-deployment
+ther would be 2 PODS
+the pod has 1 container named APP and image type is NGINX
+the container port is 80 and the protocol is TCP
+the pods and deployment are tied with the label type pathnex-app
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pathnex-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pathnex-app
+  template:
+    metadata:
+      labels:
+        app: pathnex-app
+    spec:
+      containers:
+        - name: app
+          image: nginx
+          ports:
+            - containerPort: 80
+
+
+
+===========================================================
+
+
+
+MODULE 4 : Shell Script 
+
+This shell script denotes the command to the disk partitions ina human readable format 
+
+----------
+#!/bin/bash
+
+df -h
+
+-----------
+
+
+##########################################################################
+
+
+Module 5 : DOCKER 
+
+# pull the ubuntu image from the specied regsistry ( dcker Hub)
+docker pull ununtu
+
+
+# this hsows the docker images present in the system
+docker images
+
+#this shows all the docker containers ( both running and exited ) 
+docker ps -a
+
+------------------------------
+
+This desction shows how to build a small docker file 
+
+It writes the details in a  Docker file , where the base image is specified as UBUNTU of verison 22.04
+Post that its executing the commands of Echo Hello Pathnex
+
+FROM ubuntu:22.04
+RUN apt update
+CMD ["echo", "Hello Pathnex"]
+
+
+###########################################################################
+
+
