@@ -7,6 +7,8 @@ today's task:
 	b. created a new Github Repo for he course
 	c. generated new ssh keys for the ec2 instance
 	d. conencted the github repo with ec2 using the ssh keys
+	e. conencted a branch called 1_June and pushed code to the same 
+	f. tried connecting and merging code to this branch & sent for review to pathnext
 
 tomorrow's task:
 

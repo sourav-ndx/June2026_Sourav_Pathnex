@@ -7,4 +7,5 @@
       yum:
         name: nginx
         state: present
+        #added a comment to append the file and create a new instance 
 
