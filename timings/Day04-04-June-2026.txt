@@ -7,5 +7,114 @@ I learned the below tasks today
 
 How to perform live troubleshooting using TOP command :
 How it shows the resource sonsumption by different Process and it can be sued to detect and kill process
+One Imp Note was how the command shows the average load of 1 Min , 5 min and 15 min 
 
-And Imp topic was use of 
+
+Another imp command was FIND used to locate Files and directories , it can be used to search for a file or directory .
+An imp note was the use of +mtime & -mtime with find with helps us locat efiles older than certain days with + and files newer than certain days with -
+---------------------------------
+
+Next Imp is the use of GZIP and TAR command to compress files , the use case where its used for compression of logs before certain number of days in scenarios like where disk consumption is high die to LOGS 
+
+TAR - it colects multiple file and bundles them together into one file .
+ It does nnot reduce the size , it just groups them together .
+
+GZIP - it takes a single fie and compress it to reduce it size  , it cananot combine multiple file to one .
+
+
+Hence , TAR and GZIP is USED together 
+
+To create a compressed backup of a folder , we use TAR and tell it to GZIP internally . this creates a .tar.gz
+
+tar -czvf backup.tar.gz June2026_Sourav_pathnex/
+
+-c: Create a new archive.
+-z: Compress it using zip (gzip).
+-v: Verbose (show the files on screen as it packages them).
+-f: File name (specifies the name of the output archive file).
+
+------------------------------------------
+
+
+Next command was UUMASK , how the value of UUMASK is used to set the default permission to files and directory
+So the value of UUMASK is deducted for Files and directory , the default for file is 666 and directory is 777 and UUMASK gets deducted from it.
+
+----------------------------------------------------------
+
+Next imp concept was for Hard and Soft Links
+
+
+Hard Link - It acts as an identical clone and poits to the exact same physical data location and the inode number on the disk 
+
+Its cannot be for folders only for files .
+
+A change in either changes both , doe snot dlete if original file is dleeted  ln original.txt hardlink.txt 
+
+
+Soft lInk --  its a a text path or shortcut toa file , it forwards us to the target file . If the original file is deleted the link breaks and it becomes a dangling link . it can link for both files & folders .
+
+ln -s original.txt softlink.txt
+
+-----------------------------------------------------------
+
+next was the concept of cronjob 
+
+in Linux, a cron job is a scheduled automated task, and crontab (cron table) is the configuration file used to manage those schedules
+
+crontab -e ---> open the file in edit mode
+crontab -l --> lists the cron tab entries 
+crontab -r ---> removes & dletes the entire corntab schedule file
+
+
+it has 5 * or parameters 
+
+* * * * * /path/script.sh 
+
+1---minutes(0-59)
+2---hour(0-23)
+3---dayofmonth(1-31)
+4---month(1-12)
+5---dayofweek(0-6) ) 0 is Sunday
+
+* (Asterisk): Matches every single value (e.g., a * in the minute field means "every minute")., 
+
+(Comma): Separates distinct execution values (e.g., 15,30,45 means run at those specific minutes).
+
+- (Hyphen): Specifies a range of values (e.g., 1-5 in the day-of-week field means Monday through Friday).
+
+-----------------------------------------------------
+
+
+brace Expansion :
+
+mkdir dirname{1..20}  ----> this willl create 20 dir from dirname1 to dirname20 .
+
+other commands can be also written such a way .
+
+
+------------------------------------------
+
+LSCPU ---> gives the technical info about the CPU .
+
+----------------------------------------
+
+PS -AUX & PS -EAF ---> used to list the running processess details 
+
+
+---------------------------------------------------
+
+netstat -alpn  or netstat -anlp -----> list down allhappenig in netowrk , all active ports details , 
+
+
+netstat -tunlp ---> its remove sinternal noise & give only focused INTERNET FACING SERVICES details  , 
+
+-t -- tcp traffic
+-u -- udp traffic
+-l -- only ports activbely listening fpr incoming packets
+-n -- port numbers
+--p --- process iD
+
+-----------------------------------------------------
+
+
+-
