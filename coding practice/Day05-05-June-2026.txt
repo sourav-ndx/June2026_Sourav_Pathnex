@@ -1,0 +1,150 @@
+MODULE 1 : Ansible 
+
+
+This is an Ansible playbook that automates copying a webpage file and restarting the web server.
+
+become: yes: Runs all tasks with administrative (root/sudo) privileges.
+
+
+copy task: Overwrites the remote destination file with a local file named index.html.
+
+notify & handlers: Triggers a restart of the Nginx service only if the index.html file actually changes.
+
+---
+
+- name: Manage Nginx
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Update config File 
+       copy:
+         src: index.html
+         dest: /usr/share/nginx/html/index.html
+       notify: Restart nginx
+
+  handlers:
+    - name: Restart Nginx
+      service: 
+        name: nginx
+        state: restarted 
+
+---------------------------------------------------------------------
+
+MODULE 2 :  TERRAFORM :
+
+This is a Terraform configuration block that provisions a high-performance virtual machine in AWS
+
+aws_instance : sets the ec2 name as pathnexEC2
+
+instance type : c6a.12xlarge ,
+
+user_data: runs a startup shell script that install and strt apapche httpd server upon start of ec2 .
+
+
+---
+
+resource "aws_instance" "PathnexEC2" {
+  ami           = "ami-0abcd1234abcd1234"
+  instance_type = "c6a.12xlarge"
+
+  user_data = <<EOF
+  #!/bin/bash
+  yum install -y httpd
+  systemctl start httpd
+  EOF
+   
+
+  tags = {
+    Name = "Pathnex-EC2"
+  }
+}
+
+
+-------------------------------------------------------------------
+
+
+MODULE 3 :  KUBERNETES
+
+Spins up a k8 pod with resource and limits set on it , the pod name is pathnex-loimited-pod and it has a contianer named app , th e image is nginx . Resource Limit is set to 256 Mi for Memory , cpu to 500 m 
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pathnex-limited-pod
+spec:
+  containers:
+    - name: app
+      image: nginx
+      resources:
+        limits:
+          memory: "256Mi"
+          cpu: "500m
+
+
+---------------------------------------------------------------
+
+
+
+MODULE 4 : Jenkins 
+
+
+this Jenkins declarative pipeline automates a CICD process using global variables .
+
+environment block : defines INSTITUTE_NAME with pathnex
+
+Print stage : exacutes a shell script to print welcome message 
+
+Build Stage : runs a maven build .
+
+
+pipeline {
+    agent any
+    environment {
+        INSTITUTE_NAME = "Pathnex"
+    }
+    stages {
+        stage('Print') {
+            steps {
+                sh 'echo "Welcome to $INSTITUTE_NAME DevOps Training"'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'mvn clean package -Dinstitute.name=$INSTITUTE_NAME'
+            }
+        }
+    }
+}
+
+--------------------------------------------------------------------
+
+
+MODULE 5 :  GITLAB CICD 
+
+this is a Pipeline with 1 job stage called build , it has a env variable being set for the vriable INSTITUTE_NAME and the value is Pathnex .
+
+lasted in the job a script is being executed and this variable set is being
+called in the scriot that is being run in the jib stage .
+
+the script : Downloads the target repository (git clone), enters the folder, prints a custom message, and triggers a Maven build injecting the environment variable.
+
+
+
+stages:
+ - build
+
+variables:
+  INSTITITE_NAME: "Pathnex"
+
+build:
+  stage: build
+  image: maven.3.8.1-jdk-17
+  script:
+    - git clone https://github.com/Pathnex/sample-java-app.git
+    - cd sample-java-app
+    - echo " Welcome to $INSTITUTE_NAME Devops TRAINING"
+    - mvn clean package -Dinstitute.name=$INSTITUTE_NAME
+
+--------------------------------------------------------------------
