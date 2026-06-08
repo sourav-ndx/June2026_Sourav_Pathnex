@@ -1,0 +1,134 @@
+Day 04 Scripts
+
+1. ANSIBLE :
+
+An Ansible Module to Install Packages :
+
+Below is the Ansible COnf Manager script in YAML format , its writtennfor installing WGET and GIT on all the servers its managing and privided in its list
+
+--
+
+--name: Install packages for Pathnex
+  hosts: all   // perform on all files in nthe inventory file
+  become: yes    // take required priveledge to do so like take SUDO 
+  
+  tasks :       // thr actual works to do
+    - name: Install packages for pathnex  // description ofthe task
+      yum:   // use YUM package manager
+        name:    //list of packages to isntall
+          - git    
+          - wget
+          - nginx
+        state: present  // ensure its present if there or not .
+
+--------------------------------------------------------------
+
+2. TERRAFORM : create an EC@ with Key pair 
+
+The below snipped is written IN HCL script of Terrafrom . 
+The Coud Provider conf : usues the AWS Plogin and conencts to AWS and selects the region as us-east-1
+
+The next module is used for creation of SSH key pair , showing the encrypted public key tht would be sued to ssh into 
+
+the 3rd module is for the EC2 isntance creation and its specific details like AMI tyoe , size , key_name ltags etc
+
+
+
+provider "aws" {
+  region = "us-east-1"
+}
+
+resources "aws_key_pair" "PathnexKey" {
+  key_name = "Pathnex"
+  public_key = "ssh-rsa AAA....."
+ }
+
+resource "aws_instance" "PathnexEC2" {
+ami            ="ami-0abcd1234"
+instance_type  ="c6i.8xlarge"
+key_name       = aws_key_pair.Apthnexkey.key_name
+
+tags = {
+  Name = "Pathnex-EC2"
+}
+}
+
+
+
+---------------------------------------------------------------
+
+3. KUBERNETES : This module creates a simple Clutr IP Service of name Apthnex-service and exposed the port 80 inside the cluster for internal cluster communication .
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: pathnex-service
+spec:
+  selector:
+    app: pathnex-app
+  ports:
+    - port: 80
+      targetPort: 80
+
+
+--------------------------------------------------------------
+
+4. JENKINS       : this module is fo a Jenkins FIle used to run two JOB Stages Build and Test in parallel
+
+pipeline {
+    agent any
+    stages {
+        stage('Parallel Tasks') {
+            parallel {
+                stage('Build') {
+                    steps {
+                        sh 'mvn clean compile'
+                    }
+                }
+                stage('Test') {
+                    steps {
+                        sh 'mvn test'
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+----------------------------------------------------------------
+
+
+5. GITLAB CICD   :  This shows a GITLAB CICD SCRIPT , its written in the gitlab-ci.yaml , the script has one stage called BUILD_TEST .
+this stage has two jobs MAVEN-BUILD   & MAVEN-TEST . Its using the maven:3.8.1-jdk-17 Docker image . in build its cloning a github epo to execute and in test its tying to go to the sample-java-app dir and test it .
+
+
+
+stages:
+  - build-test
+
+maven-build:
+  stage: build-test
+  image: maven:3.8.1-jdk-17
+  script:
+    - git clone https://github.com/Pathnex/sample-java-app.git
+    - cd sample-java-app
+    - mvn clean compile
+  parallel: 1
+
+maven-test:
+  stage: build-test
+  image: maven:3.8.1-jdk-17
+  script:
+    - cd sample-java-app
+    - mvn test
+  parallel: 1
+
+
+
+----------------------------------------------------
+
+
+
+-
