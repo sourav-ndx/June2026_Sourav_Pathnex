@@ -1,0 +1,124 @@
+DAY 06 -- DEBUG PRACTICE
+
+---------------------------------------------------------------------
+
+Module 1 : Ansible
+
+
+-name: Install nginx
+ hosts: all
+ become: yes
+ tasks:
+   - name: Install nginx
+     yum:
+       name: nginx
+       state: present
+
+
+Thisblock has some errors with : and identation , corrected the same and re-wrote the same .
+
+
+--------------------------------------------------------------------
+
+
+MODULE 2 : Terraform 
+
+resource "aws_instance" "FixedEC2" {
+  ami           = "ami-0xyzxxxxxxxxxxx"
+  instance_type = "t2.micro"
+  tags = {
+    Name = "Broken"
+  }
+}
+
+This code ahd missing quites in t2 micro and was reated as variable hence added quotes so it treats as literals tring 
+
+
+
+--------------------------------------------------------------------
+
+
+MODULE 3 :
+
+apiVersion: v1
+kind Pod
+metadata:
+  name: pathnex
+spec:
+  containers:
+    - name: app
+      image: nginx 
+
+there was indentation issue , : were missing fixed everythng 
+
+
+-------------------------------------------------------------------
+
+MODULE 4 : Ansible 
+
+
+
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Pathnex/sample-java-app.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'mvn clean compile'
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+    }
+}
+
+
+
+tried understanding this via chatgpt to understand the required chnages and fixed with the provided output .
+
+
+
+---------------------------------------------------------------------
+
+MODULE 5 : Gitlab CICD
+
+
+here the build and test block was running independendly , so the cd sample-java-app was not there for test to use , since build has not prepared it . hence added to make this happen one after other
+
+An artifact section was added so  the repo created in build is carried over to the test part as well .
+
+
+
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  image: maven:3.8.1-jdk-17
+  script:
+    - git clone https://github.com/Pathnex/sample-java-app.git
+    - cd sample-java-app
+    - mvn clean compile
+  artifacts:
+    paths:
+      - sample-java-app/
+
+test:
+  stage: test
+  image: maven:3.8.1-jdk-17
+  script:
+    - cd sample-java-app
+    - mvn test
+
+
+
+======================================================================
