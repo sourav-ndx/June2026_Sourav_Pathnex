@@ -1,0 +1,133 @@
+TODAYS Session :
+
+Todays session is about introduction to GIT .
+
+GIT is the verison control tool & Gitlab is a website that offers GIT as a service and helps us use gOT features via a website .
+
+1. Each folder sin Git is called a repository . A Repo can be private or Public which is accesible to all .
+
+2. Once we create a GIT repo we can asign different Riles to the Repo based on the control or restrictions we want .
+
+2. Multiple People can share a Git repo as being added as collaborators , each collabortor can contrubite to the same repo 
+
+
+3. Multiple People can share a Git repo as being added as collaborators , each collabortor can contrubite to the same repo 
+
+-------------------------------------------------
+
+4.Once the Git account is createdon Gitlab , next we have to Configure GIT , what it means is basically setup in the terminal which Git Profile we want to
+asocaite , like the name we want to associate & the ID we want to associate .
+
+
+git config --global user.name "Name"
+git config --global user.email "emailAdress"
+
+git config --list
+
+5. Git GLONE - git clone - is used to clone and bring a repository to our local machine
+
+-------------------------------------------------------------------
+
+6. Git status -  It displays us the status of the code .it checks the sync between the git folder and remote repo and tells the status .
+
+Usually 4 Kinds of Status are there 
+
+UNTRACKED FILE - the new files whcich Git does not track yet .
+MODIFIED FILE - Files git is tracking and some changes has been made on them STAGED FIle - FIle which has been modified and is ready to be committed.
+UNMODIFIED File - Files which are unchanged 
+
+-------------------------------------------------------------------
+7. whenever  Git is initializrd , it creates a hidden folder .git under all the folders added to git .
+
+-------------------------------------------------------------------
+
+8 ADD & COMMIT :
+
+Add - Adds a New or Unchanged file in the working directory to the GIT staging Area 
+
+COMMIT - It is the record of the change of File told to Git .
+  git commit -m "some message / tickets / useful info "
+
+-----------------------------------------------------------
+9. PUSH command - It is used to Upload local repo content to remote repo ( Gitlab etc ) 
+
+git push origin main  // for main branch
+
+git push origin < sub-branch-name>  // for any sub branch 
+
+if we need to push to sub branches and set it for further pushes use a -u command 
+
+git push -u origin 5thJune
+
+----------------------------------------------
+
+10 . GIT INIT -----
+
+Used to create a new Git Repo ,  Lets say we have new project folder and we want to add that to git we will start with GIT INIT on the folder .
+
+git init
+
+
+--------------
+
+11. To Add a NEw REPO 
+
+git init - to intialize it 
+
+git remote add origin <repo link> // usually provided in the Github / gitlab wesite  , so now by this we are adding a new repo by name ORIGIN ( default )
+
+git remote -v ( to verify the the remote repo we are now in ) 
+
+git branch   ----> to check the branch
+
+git branch -m main   -----> this is used to chnqage the name of PRESENT branch , in tnis we are changing the name of the branch from MASTER to MAIN
+
+git push origin main -------> push to main branch
+
+also now if we would be working on a particulqr branch foir quite sometime , we can set the name of the branch so all further push will go to that branch only 
+
+git push -u origin main  --------->  -u set upstream , 
+
+
+
+
+--------------------------------------
+12.
+Workflow 
+
+Github Repo --> CLone it in local ---> make changes ---> add them ----> Commit them ----> Push them 
+
+
+--------------------------------------
+
+
+13
+GIT BRANCHES :
+==============
+
+
+git branch --> on which branch  we are 
+
+git branch -m new name  ---> chnage name 
+
+git checkout -b feature1 ---> create a new bracnh feature1 and go to it 
+
+to go back to main  ----> git checkout main
+
+to delete a branch ----> git branch -d <branch name>
+
+# we cannot delete the branch we are in , so to dlete a branch 1st go to some other branch and then delete .
+
+
+------------------------------------------
+
+
+git diff main -----> it will compare 
+
+
+++++++++++++++++++++++++++++
+
+
+tomorrow - further deep down in GIT :
+
+
