@@ -1,0 +1,105 @@
+DAY 06 :
+
+Todays Learnings : GIT AGAIN :
+
+What were few of the issues that Loinux File system had , so the nesssecity of Git cam e.
+
+1. Information of verison of Files were missing
+2. Created Edited Modified by Missing
+3. Author Tracking Not available , any member of the Group can edit wihtout tracking
+4. Recovery is not possible 
+
+Hence File system is NOT SAFE & hence GIT VErsion Control System was required .
+
+
+-----------------
+
+GIT INIT : we are creating an empty GIT repository .
+
+GIT ADD : it moves the files from Files system to the STAGING Area .
+
+STAGING AREA : it a mdlle ground before Commit where GIT saves snapshot of the prepared changes , its intermediate area where Git holds changes before they saved to project history .
+
+
+GIT COMMIT : with ths now the files moves from staging to actual verison control system .
+
+One needs to prvide the name and email with
+GIT CONFIG --GLOBAL USER.NAME "name"
+GIT CONFIG --GLOBAL USER.EMAIL "email"
+
+GIT RESTORE File.txt : it rollback and bring back a file which was added to GIT and committed and was then deleted , hence if File.xtx was added to got but then deleted , GIT RESTORE Will bring nack the file in the Folder .
+
+GIT is in local so if e need to work wth others and shares ,we have to sue tools like GITHUB GITLAB etc which are DISTRIBUTED VERSION COntrol system .
+
+------------------
+
+SSH and http methods are used to conenct the local to the remote(gitlab)
+
+ssh-keygen is used to create the ssh keys and then pulic keys are copied to gitlab .
+
+-------------
+
+GIT REMOTE ADD ORIGIN < URL OF REPO > ----> this si used to add the origin to know which githuba nd wch repo we are to connect to .
+
+Without ORIGIN PUSH will not work , as the destination is not set .
+
+------------------
+
+
+to bring file from GITHUB repo to local , we use PULL ,
+
+
+git pull origin master ---> a file presnt in the master branch of the repo will be copied to the local directory i am in .
+
+----------------------------
+FORK :  copy a public project to our personal GitHub account.
+
+FORK : it creates a copy of of a Github Repo ( someone else's to create a copy with abolute access )  . FOrk has nothing to do with Local , it creates a copy of somes repo into our own Github account .
+
+We make changes and save to them . We may submit a formal PR to the original project owner to pull our new changes into their main project .
+
+
+---------------------------
+
+GIT CLONE ---> THis is used to bring a GITHUB REPO to our LOCAL  .
+
+-----------------------------
+
+BRANCHING : An independednt isolated workspace where we can write ccode , work , test features , fix bugs etc without changing the main project .
+
+the default branch in GITHUB is MAIN , LOCAL the default branch is MASTER
+
+-----------------------------------------------------------------
+
+GIT BRANCH --> show present branch
+
+GIT CHECKOUT -B subbranch ---> a new branch which has evevrything from tje main and a copy .
+
+GIT CHECKOUT master ---> switch to MASTER brasnch
+
+--------------------------------------
+
+TOKEN BASED AUTHENTICATION :
+
+PAT - Personal Access Token
+
+we need to access Github , we dont have ssh keys , go to account--> setting --- developer setting --> Personal Access Token ---> Tokens (classic) ---> Generate New token ( classic ) ---- give access to repo by selecting it ----> generate token
+
+Copy the token
+
+#git remote -v
+
+#git remote set-url origin htps://<token>
+
+git push origin devops -----> Now able to push
+
+this is how we are able to push in without ssh keys
+
+
+---------------------------------------
+
+
+
+TOMORROW : GIT FURTHER DETAILS
+
+
