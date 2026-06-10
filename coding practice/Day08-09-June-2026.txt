@@ -1,0 +1,187 @@
+MODULE 1 : Ansible
+
+
+This ansible module used for isntallation of pacckages provided as a list  in varibales across all servrs , and the same has been used 
+to call inside the installation module of TASKS 
+
+{{ pathnex_packages }}": Feeds the predefined variable list into the installer using Jinja2 syntax templates
+
+
+- name: Install packages for Pathnex using variables
+  hosts: all
+  become: yes
+
+  vars:
+    pathnex_packages:
+      - tree
+      - unzip
+      - vim
+
+  tasks:
+    - name: Install required packages
+      yum:
+        name: "{{ pathnex_packages }}"
+        state: present
+ 
+
+--------------------------------------------------------
+
+MODULE 2 :
+
+TERRAFORM MODULE to create a VPC and SUBNET 
+
+provider "aws" {
+  region = "us-east-1"
+}
+
+resource "aws_vpc" "PathnexVPC" {
+dule 
+
+
+  cidr_block = "10.10.0.0/16"
+
+  tags = {
+    Name = "Pathnex-VPC"
+  }
+}
+
+resource "aws_subnet" "PathnexSubnet" {
+  vpc_id                  = aws_vpc.PathnexVPC.id
+  cidr_block              = "10.10.1.0/24"
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "Pathnex-Subnet"
+  }
+}
+
+
+----------------------------------------------------------------------
+
+MODULE 3 :
+
+this module of k7 yaml shows liveness and readiness probes
+
+liveness probes are used to make sure the applciation is up and healthy to take traffic
+
+readiness is used tomake sure the application is up and ready to process traffic .
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pathnex-probe-pod
+spec:
+  containers:
+    - name: web
+      image: nginx
+      livenessProbe:
+        httpGet:
+          path: /
+          port: 80
+        initialDelaySeconds: 5
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 80
+        initialDelaySeconds: 3
+
+
+-----------------------------------------------------------------------
+
+MODULE 4 :
+
+this shell script module shows the use of FOR loop in shell script 
+
+#!/bin/bash
+
+for item in Pthnex Devops training ; do
+ echo "Item :  $item "
+done
+
+-----------------------------------------------------------------
+
+ MODULE 5:
+
+JENKINS :
+
+pipeline {
+    agent any
+    parameters {
+        string(name: 'ENVIRONMENT', defaultValue: 'dev', description: 'Deployment Environment')
+    }
+    environment {
+        INSTITUTE_NAME = "Pathnex"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Pathnex/sample-java-app.git'
+            }
+        }
+        stage('Build') {
+
+            when {
+                branch 'main'
+            }
+            steps {
+                sh 'mvn clean compile'
+            }
+        }
+        stage('Deploy') {
+            when {
+                expression { params.ENVIRONMENT == 'dev' }
+            }
+            steps {
+                sh 'echo "Deploying to $ENVIRONMENT by $INSTITUTE_NAME"'
+            }
+        }
+    }
+}
+
+
+
+--------------------------------------------------------------------
+
+MODULE 6 :
+
+In this module we will make use of conditional conditions to run a GITLAB PIPELINE 
+
+It defines a two-stage automated workflow (build and deploy) and relies on conditional execution blocks (only) to control exactly when each job runs
+
+
+The build job will only trigger if a code change (a push or a merge) happens directly on the main branch.
+
+The deploy job will only run if the pipeline environment variable named $CI_ENVIRONMENT_NAME matches the exact string value "dev".
+
+
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  image: maven:3.8.1-jdk-17
+  script:
+    - git clone https://github.com/Pathnex/sample-java-app.git
+    - cd sample-java-app
+    - mvn clean compile
+  only:
+    - main
+
+deploy:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - echo "Deploying to $CI_ENVIRONMENT_NAME by Pathnex"
+  only:
+    variables:
+      - $CI_ENVIRONMENT_NAME == "dev"
+
+
+
+-----------------------------------------------------------------
+
+
+
+
+
