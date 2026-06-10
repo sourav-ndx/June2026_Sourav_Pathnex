@@ -1,0 +1,280 @@
+Todays Learning are continue on further AWS services :
+
+
+VPC : ( in short )
+
+VPC stands for Virtual private cloud  , its  an isolated network in AWS we create and deploy our services within . We define the subnet ranges here to do that .
+
+Subnet - it s aslice of VPC tied to one AZ . Public Subnet has IP's interney facing and Private subnet and non internet facing or internal only IP's .
+
+IGW : internet gateway - it conencts our VPC tot he internet . Withoiut this nothing in the VPC can reach the internet .
+
+Route table : This is the rule book in VPC that defines how taffic will be routed or which traffic will go where . Pulic subnet routes to IGW & Private routes to NAT .
+
+NAT : let private subnet resources , initiate an OUTBOUND only request to the Internet . Internet cannot do ingress on this .
+
+SG : Security Groups - these are f/w at the isntance level . Works on Allow only rules . return traffic auto allowed .
+
+NACL - Firewall at subnet level , need explicit denya nd allow configurations .
+
+VPC peering : private connection between two VPC's . Each 1 to 1 mapping of connection between VPC's 
+
+Transit gateway - it works as a central hub of networks , that connects multiple VPC's or VPC's to On prem network .
+
+------------------------------------------------------------------------
+
+AWS Keymanager :
+
+Managed encryption key service. Every AWS service uses it for encryption at rest.
+
+o Supports symmetric and asymmetric encryption keys.
+o Easily integrates with AWS services like S3, RDS, and EBS.
+o Automates key rotation to simplify key management.
+o Provides fine-grained access control for encryption keys.
+o Audits key usage via CloudTrail for compliance.
+
+----------------------------------------------------------------------------
+
+SSM - System Manager  :
+
+
+Central management service for EC2 and on-prem servers. 
+Operate, patch, configure, and run commands across your fleet without SSH.
+
+feature isnaside it 
+
+Parameter Store : store config and secrets as key-value pairs.
+
+Patch manager : automate OS patching across EC2 fleet.
+
+Run Command : Run shell commands across multiple EC2 simultanrosuly without EC2
+
+Inventory : Collect metadat of instances 
+
+----------------------------------------------------------------------
+
+
+AMAZON RDS : Relational Database Service 
+
+Managed relational database. AWS handles provisioning, patching, backups, replication. You just use the DB.
+Supported engines: MySQL, PostgreSQL, MariaDB, Oracle, SQL Server, Aurora.
+
+Multi AZ  Read rep;cias , automated backups Aurora
+
+RDS live sin private subnet always , SG contrl access - only apps erver allowed , 
+
+
+---------------------------------------------------------------------------
+
+AMAZON Aurora :
+
+AWS's own cloud-native relational DB. MySQL and PostgreSQL compatible but faster, more resilient, more scalable than standard RDS
+
+Auto scales base don laod with aurora serverless , for unpredicted loads .
+
+
+--------------------------------------------------------------------------
+
+AMAZON DYNAMO DB :
+
+AWS managed NoSQL database. Key-value and document store. Serverless — no servers to manage, auto-scales, single-digit millisecond latency at any scale.
+
+Table — collection of items (like rows).
+Item — single record (like a row). Max 400KB.
+Attribute — field within item (like a column).
+Primary Key — two types:
+
+Partition Key only — single unique identifier
+Partition Key + Sort Key — composite, allows multiple items per partition
+
+
+-----------------------------------------------------------------------
+REDSHIFT :
+
+AWS managed data warehouse. Runs SQL queries on massive amounts of data — petabyte scale. Not for transactional workloads (that's RDS) — for analytics and reporting.
+
+Mental model: RDS = your app's operational DB. 
+Redshift = analytics on historical data at massive scale.
+
+-------------------------------------------------------------------------
+
+DMS - DATABASE MIGRATION SERVICE :
+
+Managed service to migrate databases to AWS. Keeps source DB running during migration — zero downtime migration.
+
+Source DB → DMS Replication Instance → Target DB
+
+Continuously replicates changes from source to target
+Source stays live until you cut over
+You choose when to switch — no forced downtime
+
+Works for both HoMOGENEOUS ( mysql->mysql ) or heterogeneous ( mysql-> PostgressSql )
+
+--------------------------------------------------------------------------
+
+AWS batch :
+
+Managed service to run batch computing jobs at scale. 
+
+We define the job, AWS provisions the right compute, runs it, scales it, cleans it up. No servers to manage.
+
+Mental model: Lambda = short tasks (max 15 min). AWS Batch = long-running heavy compute jobs, no time limit.
+
+Batch is like saying "here's my packaged job in a box (Docker image), run it when needed, scale it, clean it up." We never touch the server.
+
+
+-------------------------------------------------------------------------
+
+AWS Glue :
+
+Managed serverless ETL (Extract, Transform, Load) service. Moves and transforms data between sources. No servers to manage.
+Mental model: Data sits in S3, RDS, DynamoDB in different formats → Glue cleans, transforms, restructures it → loads into Redshift or S3 for analytics
+
+
+ETL Job — your transformation logic written in Python or Scala. Glue runs it serverless.
+
+Glue Crawler — scans your data sources (S3, RDS) → automatically detects schema → populates Glue Data Catalog.
+
+Glue Data Catalog — central metadata repository. Stores table definitions, schemas, locations. Think of it as a metadata index of all your data.
+
+
+
+----------------------------------------------------------------------------------
+
+EFS : Elastic File System :
+
+EFS = AWS managed NFS. Mount same filesystem across multiple Linux EC2s simultaneously. Auto-scales, no provisioning needed.
+
+
+Linux only (Windows → FSx)
+Region-wide, not AZ-locked
+More expensive than EBS
+Use when multiple EC2s need shared filesystem
+
+
+---------------------------------------------------------------------------------
+
+Elastic Beanstalk :
+
+PaaS (Platform as a Service) on AWS. You upload your code → Beanstalk automatically provisions EC2, ALB, ASG, RDS, security groups. You focus on code, not infrastructure.
+
+
+Platform-as-a-Service (PaaS) for deploying and managing applications.
+
+
+Supports multiple programming languages, including Java, Python, Node.js,
+and more.
+o Automatically handles deployment, scaling, and monitoring.
+o Simplifies application management with an easy-to-use console.
+o Integrates with other AWS services like RDS, S3, and SNS.
+o Allows easy customization with configuration options.
+
+---------------------------------------------------------------------------
+
+AWS CloudFront :
+
+AWS CDN system COntent delivery Network , 
+
+Caches our content at edge locations worldwide. Users get content from nearest edge — faster delivery, less load on origin.
+
+o Distributes content to users globally with low latency.
+o Supports dynamic and static content delivery.
+o Can serve from edge locations close to users for faster speeds.
+
+
+--------------------------------------------------------------------------------
+
+AWS Snowball :
+
+Physical devices AWS ships to us to migrate massive amounts of data to AWS. When internet transfer is too slow or too expensive — ship data physically.
+
+
+Snowball Edge Storage Optimized — 80TB storage. Copy data onto it, ship back to AWS, AWS uploads to S3. Pure data migration.
+
+
+Snowball Edge Compute Optimized — same device but with compute (EC2, Lambda). Run processing at remote/edge locations with no internet. Oil rigs, ships, military.
+
+
+Snowmobile — literal shipping container truck. 100 petabytes capacity. For exabyte-scale migration. AWS drives the truck to our datacenter.
+
+----------------------------------------------------------------------------------
+
+CODEPIPELINE - CODEBUILD - CoDEDEPLOY :
+
+CodePipeline (orchestrator)
+     ↓
+CodeBuild (build + test)
+     ↓
+CodeDeploy (deploy to target)
+
+AWS's native CI/CD stack. Equivalent to GitLab CI/Jenkins + deployment tooling.
+
+Dev pushes to GitHub
+      ↓
+CodePipeline triggers
+      ↓
+CodeBuild — runs tests, builds Docker image, pushes to ECR
+      ↓
+CodeDeploy — deploys new image to ECS/EC2
+      ↓
+Done — zero touch deployment
+
+
+***********
+
+CodePipeline
+What: Orchestrates the entire CI/CD workflow. Connects source → build → test → deploy stages.
+
+Triggers on code push (CodeCommit, GitHub, S3)
+Connects CodeBuild + CodeDeploy together
+Visual pipeline in console
+Think of it as the GitLab CI pipeline YAML equivalent — but visual and managed
+
+
+*************
+
+CodeBuild
+What: Managed build server. Compiles code, runs tests, produces artifacts. No Jenkins server to manage.
+
+Runs in Docker containers — you define environment
+Config in buildspec.yml in your repo root
+Pay per build minute — no idle cost
+Output artifacts → S3
+
+*******************
+
+CodeDeploy
+What: Automates deployment to EC2, ECS, Lambda, or on-prem servers.
+
+Deployment strategy : 
+
+Rolling : deploy to batch of instance at a time 
+BLue/Green: , Cananry
+
+--------------------------------------------------------------------
+
+AWS X-RAY :
+
+AWS distributed tracing service. Tracks requests as they flow through your application across multiple services. Tells you exactly where bottlenecks and failures are.
+
+
+Mental model: User request hits API Gateway → Lambda → DynamoDB → S3. Something is slow. X-Ray shows you exactly which hop is taking time and why.
+
+Request enters app
+      ↓
+X-Ray SDK traces each service hop
+      ↓
+Sends trace data to X-Ray
+      ↓
+X-Ray builds Service Map + Timeline
+
+
+
+Use case :
+
+Microservices debugging — find which service is slow
+Identify bottleneck in Lambda → DynamoDB call
+Error rate analysis per service
+Latency percentile tracking (p99, p95)
+
+----------------------------------------
