@@ -1,0 +1,227 @@
+Todays Notes & Learning :
+
+AWS Session 1 & 2 -
+
+1. EC2 : EC2 are VM's on AWS . We rent the compute capacity .
+
+It runs using different AMI's - which packages fidd=fernt OS & Preinstalled softwares . We can create out own custom AMI's 
+
+There are varous instance types base don the falimy and common ones prefixed as  t , m , c ,r ,g etc
+t - perishable & cheap , m - general purspose , c - compute intensice , r - for memory intensive , g for high gpu tasks 
+
+different pricing models gets applied like , 
+
+On demand - short term 
+reserved instances , 
+spot isntances , 
+saving plans 
+and dedicated hosts based on application requiremnts
+
+--------------
+
+3. Storage EBS  - EFS - S3
+
+EBS : Elastic Block Storage 
+
+It is the external block storage ( similar to a Hard drive ) and is usualy attched to a single EC2 instance . 
+Its per AZ specific .
+It can exist independently and can be detache from one ec2 and attched to other 
+Does not Autoscale 
+
+gp3  -  Default. General purpose SSD
+io2 -- High IOPS databases — RDS, Oracle
+st1 -- Throughput HDD — Kafka, big data sequential reads
+sc1 - Cold HDD — cheapest, infrequent access
+
+
+EFS : Elastic File Storage
+
+Its a NFS service of AWS , Multiple EC2 instance mounts on the same EFS drive silultaneously .
+
+Its region wide not AZ wide ,
+It Autoscales and we pay for per gb stored .
+
+
+
+S3 : Simple Storage Service - This is Object Storage Service of AWS . 
+
+Its a global service , buckets are region specifcs but the namespace is global .
+Its not attched to EC2 ( until recently ) and is accessed via a URL or API
+
+It auto transitions objects into different classes based on age of retention 
+
+Can be used for CRoss Region and Same region replication with different buckets 
+Versioning provided for object storage 
+
+Easily integrates with AWS services like lmbda , 
+
+-----------------------
+
+SessioN manager :
+
+
+This is the feature provided by AWS to access AWS isntances without using SSH keys . Its provides GUI based access to the ec2 isntances without opening inbound ports .
+
+can be used for private as well as private subnets , and we do not need a public ip to get acess to the Private Instances .
+
+Loging and auditing for EC2 instances .
+
+
+
+-----------------------------------
+
+ROUTE 53 :
+
+Its the DNS Service of AWS . also used for health traffic , traffic monirting and DNS registration .
+
+There are multiple types of DNS record types 
+A - used for ipv4
+AAAA - used for ipv6
+CNAME - used for DOMAIN to DOMANI ttanslation
+ALIAS - DOnamin to any AWS service translations
+MX - Mail server 
+NS - namse server etc
+
+
+It has both public and priviate hosted zones . Puplics responds to external queries from the internet and Private is used for DNS queries only withinVPC for internal domain
+
+
+there are varoius routinh alogrithn like
+IP based - for a specific IP or CIDR range 
+Geolication based - traffic from a specific location gets routed
+LAtency based - traffic decides path based onlatency
+Weitage based - we aloocate differnt % of traffic across differnt instances
+Failover - fault tolerance 
+Geoproximity - Routes based on location and resourcess 
+
+
+----------------------------------
+
+CLoud Trail :
+
+It records every cloud activity and API call made in the AWS account . It tracks all acivity across all AWS services . 
+
+Used for governence , security , audit , complicance etc .
+
+Logs are stored in S3 .
+
+---------------------------------------
+
+CLOUD WATCH :
+
+Its the monitoring and observalibality service from AWS ( like prometheus and Grafana ) 
+
+It collects logs metrics and events fro AWS resources 
+
+We can set alerts and alarms and trigegr action based on ruleset .
+
+it has Metrics - real numbers of CPU , Memeory etc , Memory and cpu needs  Cloudwatch Agent to be installed .
+
+Logs - Centrlaized logging , lambda , EC2 , ECS all sends logs here .
+
+Alarms - watch a metric --> threashold --> take action 
+
+Eventbridge --> reach to AWS events or schedules tasks , or alsolike cron job trigger this every night .
+
+----------------------------------------
+
+Auto Scaling / Groups :
+
+Automatically add or remove EC2 instances based on demand. Always paired with ALB for Web workloads .
+
+3 Things to  Configure ;
+
+Launch Template — what to launch. 
+AMI + instance type + SG + IAM role + user data. Think of it as the EC2 blueprint.
+
+Auto Scaling Group (ASG) — where and how many.
+
+Min / Max / Desired capacity
+Which AZs to spread across
+Which Launch Template to use
+
+Scaling Policy — when to scale.
+
+-------------------------------------------------------------
+
+LAMBDA - the serverless compute service of AWS 
+
+Run the code without managing the service . Used for short time isntances , max time for lambda is 15 mins .
+
+We package the code + runtime +m config required to run it . it supports pythin , node.js , java , go , ruby , .net .
+
+There is a trigger set to invoke lambda functions 
+
+IAM roles gets tied to it , what the functions can do etc .
+
+CPU is not directly configurable it scales with proprtion to memory . 
+
+E.g Image uploaded to s3 --> downsize , zip , change quality etc
+
+Nightly cleanup --> eventbridge cron --> Lambda deletes old logs etc , backup 
+Infra automation --> stop dev ec2 at night start in morning 
+
+ci-cd webhook --> github webhook --> api gateway --> lambda --> trigger pipeline
+
+API GATEWAY - AWS managed service that sits in front of backend ( mostly lambda ) and exposes it via HTP API  .
+
+-------------------------------------------------------------
+
+AWS Shiedld : Mananged DDos Protection service of AWS ,
+
+DDOS - flooding with fake traffic so real traffic caanot reach the service , like flood with ip packets , SYN flood so there is no SYN ACK , millions of HTTPS gET / POST request etc .
+
+
+Shiedld Auto Filters L3/L4 junk at AWS network edge .
+
+Absic comes with default , Advance one is paid service .
+
+----------------------------------------------------
+
+AWS WAF - WEB APPLICATION FIREWALL 
+
+Filters HTTP / HTTPS at Layer 7 , blocks malicious web requests before they hit the app . We define the rules - WAF allows or block based on them .
+
+
+How It Works
+Web ACL — container for your rules. Attach to CloudFront or ALB.
+Rules — conditions to match traffic. On match → Allow / Block / Count.
+Rule Groups — reusable collection of rules.
+
+--------------------------------------------------------
+
+AMAZON GUARD DUTY :
+
+Its the threat detections ervice of AWS 
+
+Managed threat detection service. 
+
+Continuously monitors your AWS account for malicious activity and suspicious behavior. 
+
+Its like  an intelligent security analyst watching everything 24/7
+
+It analyzes the data sources autimaticaly . No Agent No setup . it raises findings with severity level 
+
+It only detects and alerts , doesn't block anything .
+
+-----------------------------------------------------------
+
+AMAZON INSPECTOR :
+
+Automatic Security scanning service of AWS . 
+
+It scans EC2 , Lambdas , and Container Images for software vulnerabilities and unintended network operations .
+
+GuardDuty = detects active threats happening now. 
+
+Inspector = finds vulnerabilities before they're exploited
+
+Once enabled it does automatic scanning always .
+
+It Generates a RISK score ( not severity ) priotized by severity .
+
+Inspector findings ≠ active attack — it's potential risk. 
+GuardDuty finding = something bad happening right now.
+
+----------------------------------------------------------
+
