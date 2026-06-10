@@ -1,0 +1,136 @@
+MODULE 1 : A ANsible code written from scratch to isntall nginx
+
+----
+
+- name: Install Nginx on pathnex Server
+  hosts: all
+  become: yum
+
+  tasks:
+    - name: Isntall nginx
+      yum:
+        name: nginx
+        state: present
+
+
+------------------------------------------------------------------
+
+Module 2 : A terraform code to create an EC2 isntance
+
+provider "aws" {
+  region = "us-east-1"
+
+}
+
+resource "aws_isntance" "PathnexEc2forSourav"{
+  ami           = "ami-xxxxxxxxxxxxxxx"
+  instance_type = "c5.xlarge"
+
+
+  tags = {
+    Name = "PAthnex-EC2forSourav"
+    }
+
+}
+
+-------------------------------------------------------------------
+
+MOdule 3 : k8 deployment with 2 replicas 
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+
+
+
+--------------------------------------------------------------
+
+MODULE 3 : print a shell script to print date & uptime 
+
+#/bin/bash
+
+echo " current Date & Time "
+date
+echo "----------"
+
+echo "System Uptime"
+uptime
+
+
+-----------------------------------------------------
+
+MODULE 4 : parmatised Build using Jenkins 
+
+code used 
+
+agent : tells jenkis t o run it on available agent
+
+parameters : Creates a user-input field named ENVIRONMENT 
+
+environment : sets a global value "PAthnex"
+
+stage: Chekout , the stage which downloads the application source code from github
+stage: Deploy , print linux shell lessage to print out deploy message 
+
+
+
+pipeline {
+    agent any
+    parameters {
+        string(name: 'ENVIRONMENT', defaultValue: 'dev', description: 'Deployment Environment')
+    }
+    environment {
+        INSTITUTE_NAME = "Pathnex"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/Pathnex/sample-java-app.git'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'echo "Deploying to $ENVIRONMENT by $INSTITUTE_NAME"'
+            }
+        }
+    }
+}
+
+---------------------------------------------------------------------
+
+
+
+MODULE 5 : GITLAB CICD , In this module of Gitlab tried , storing an Environemnt variable & then passign the value of that in the PIpelone script .
+
+stages :
+  - deploy
+
+variables:
+  INSTITUTE_NAME: "Pathnex"
+  ENVIRONMENT: "dev"
+
+deploy:
+  stage: deploy
+  image: apline:latest
+  script:
+    - echo "Deploying to $ENVIRONEMNT by $INSTITUTE_NAME"
+
+-----------------------------------------------------------------------
