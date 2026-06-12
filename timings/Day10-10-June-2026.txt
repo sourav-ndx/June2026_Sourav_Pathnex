@@ -1,0 +1,114 @@
+TODAY I refreshed DOCKER End to end 
+
+Container : an immutable light weight instance of an application build and packaged with all its dependencies and required software .
+
+Container vs VM : VM has a hypervisor layer and require has a dedicated OS for itself 
+COntainer is lightweight and share the same base host kernal to runa ll containers , no dedicated OS for itself .
+
+VM are heavy with OS and kenal packaged , Containers are light weight with only the Apllication with its dependecies packaged .
+
+VM's take time to intantiate and start , Containers start and instantiate fast in very less time .
+
+There is no heavey gues OS latyer in containers and there is no hypervisor , its an isolated host process running directly on the base operating system .
+
+----------------------------
+
+The Core materials of Docker 
+
+
+Dockerfile: The text blueprint. The immutable structural recipe. We write the step by step layout of the requirement of the required application here . All source code is caaled .
+
+required package oisntallation command 
+
+startup and execution commands everything getting written in docker file .
+
+
+Image: The static, read-only multi-layered snapshot built directly from the Dockerfile.  A Dockerfile when build an image is created , its immutable , once a image is build its property cannot be edited .
+
+A Image is versioned for tracebality .
+
+docker build -t node-app:v1 .
+
+docker build -t node-app:v1 -f /home/mydir/Dockerfile .
+
+if we are in differnt folder , docker file in differnet folder , and appplication file sin different folder 
+
+docker build -t node-app:v1 -f /absolute/path/to/Dockerfile /absolute/path/to/app-files
+
+NOTE : ALL APPLICATION DEPENDENCIES require or mentioned in COPY command needs to be present in the application directory mentioned . ( /absolute/path/to/app-files ) 
+
+
+
+Container: A dynamic, running instance of an image execution block.
+
+
+docker run -d node-app:v1  ( any random name willbe assigned to the new container )
+
+docker run -d --name my-run-app:v1 node-app:v1  ( container willl be named my-sun-app:v1 )
+
+
+---------------------------------------------------------
+
+docker ps gives the processed 
+
+docker ps -a ---> all processes or containers 
+
+-----------------------------------------------------------
+
+Port MAPPING :
+
+docker run -d -p 8080:3000 node-app:v1
+
+maps port 3000 of the container to 8080 of the host .
+
+docker run -d -p 127.0.0.1:8080:3000 node-app:v1 
+restrict access only from the local machine 
+
+docker run -d -p :3000 node-app:v1
+add any random host port to the container port 3000
+
+---------------------------------------------------------------
+
+Docker Networking :
+
+Bridge : Creates a private internal network on the host computer where containers can securely talk to each other.
+
+Overlay : pans a single secure network across multiple physical servers or cloud virtual machines. acts like a virtual bridge that connects containers sitting on completely different physical computers,
+
+NONE : disables all external network interfaces. It leaves the container with only the local loopback interface (127.0.0.1 / localhost).
+
+HOST : it removes all network isolation between the container and your computer, the container directly hijacks your host's IP address and ports. If you try to run a second container on that same port, it will crash with a "port already in use" error.
+
+
+-------------------------------------------------------------------
+
+DOCKER STORAGE :
+
+VOLUME : /var/lib/docker/volume , Storage folders entirely managed by Docker on your host machine's hard drive
+
+Bind Mount : Direct mapping of an existing folder in the host machine into the container .
+
+-------------------------------------------------------------
+
+
+docker rm <id> - delet one or more container 
+
+docker rm -f <id> :
+
+docker rmi <id >  : delete image 
+
+docker volumen rm <name> : delete a specific volume
+
+docker container prune : delete all stopped container
+
+docker image prune : dlete all dangling container 
+
+docker delete image prune -a : delete all non used image , currently not used by cotnainer 
+
+docker volume prune : delete all unused volume 
+
+docker system prune: The ultimate cleanup. Deletes all stopped containers, unused networks, and dangling images at once.
+
+----------------------------------------------------------
+
+

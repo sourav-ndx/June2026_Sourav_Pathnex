@@ -1,0 +1,180 @@
+MODULE 1  Ansible 
+
+
+
+
+- name: Install tool based on OS 
+  hosts: all
+  become: yes
+  
+  tasks:
+    - name: Install htop
+      yum:
+        name: htop
+        state: present
+      when: ansible_facts['os_family'] == "RedHat"
+
+
+its installing on all the hosts listed in the inventory file , the package being installed is HTOP and 
+stste is present means check if software is ther eif not isntall it .
+
+when: ansible_facts['os_family'] == "Redhat"
+
+Ansible run scans to collect data called ansible_facts . If the system family is found to be " Redhat " , the tasks runs 
+
+if the system is U unti Debian etc , Ansible will safely skip this tasks without an error .
+
+----------------------------------------------------------
+
+MODULE 2 : Terraform 
+
+This Module of Terraform is meant to configure network routing in AWS so that resources inside a specific subnet can access the public internet, making it a Public Subnet
+
+resource "aws_route_table" "PathnexRT" {
+  vpc_id = aws_vpc.PathnexVPC.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.PathnexIGW.id
+  }
+
+  tags = {
+    Name = "Pathnex-RouteTable"
+  }
+}
+
+resource "aws_route_table_association" "PathnexRTA" {
+  subnet_id      = aws_subnet.PathnexSubnet.id
+  route_table_id = aws_route_table.PathnexRT.id
+}
+
+
+
+a. AWS ROute table : pathnexRT
+    vpc_id = aws_vpc.APthnexVPC.id , this maps the Route table directly to this VPC ID
+
+    Route :  Defines the routing rule , i.e send all traffic ( 0.0.0.0/0 ) to the AWS Internet gateway PathnexIGW
+
+   a tag is also applied for tracking with the name Pathnex-RouteTable
+
+b. Next block is for the aws_route_table_association , this block adds the routing rule above to a specific subnet .
+
+      subnet_id = aws_subnet.PathnexSubnet.id: Targets specific network subnet n       amed PathnexSubnet
+
+       route_table_id = aws_route_table.PathnexRT.id: Attaches the route table d               efined above to that subnet.
+
+
+
+-----------------------------------------------------------------------
+
+
+
+
+MODULE 3 : Shell Script 
+
+this takes a loop from 1 to 10 using for loop and print the vlaie if the iteration during each loop 
+
+
+#!/bin/bash
+
+for i in {1..10}; do
+  echo "Number: $i"
+done
+
+
+
+
+
+----------------------------------------------
+
+
+MODULE 4 : KUBERNETES SECRET
+
+This modules creates a kubernetes Secrwet object by the name pathnex-secret , itstores the base 64 encoded value of a password directly into this secret . The word "pathnex123" is base encoded to base64 and stored in the secret .
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pathnex-secret
+type: Opaque
+data:
+  password: cGF0aG5leDEyMw==   # "pathnex123" base64
+
+We can also write the password in plain text and leave the base 64 encoding to kubernetes by doing this below way 
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pathnex-secret
+type: Opaque
+stringData: # Use stringData for plaintext
+  password: pathnex123 # Plaintext string (Kubernetes encodes it automatically)
+                           Use code with caution.
+
+
+
+------------------------------------------------------------
+
+
+MODULE 5 : JENKINS
+
+
+pipeline {
+    agent any
+    environment {
+        INSTITUTE_NAME = "Pathnex"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/Pathnex/sample-java-app.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh '''
+                if [ -d ".m2" ]; then
+                    echo "Using cached dependencies"
+                else
+                    mvn clean compile
+                fi
+                '''
+            }
+        }
+    }
+}
+
+
+
+-------------------------------------------------------------------
+
+
+MODULE 6 : GITLSB CICD
+
+This module of Gitlab CICD , we are making use of CACHE in the PIPELINE , the
+CACHE Modules save a task in cache so this helps in faster executing becase we need not go to the exact data source in every run .
+
+Instead of downloading the exact same files from the internet every time we change our code, GitLab saves this folder. 
+On the next run, it restores the folder instantly, saving you minutes of download time.
+
+
+
+stages:
+  - build
+
+build:
+  stage: build
+  image: maven:3.8.1-jdk-17
+  cache:
+    key: maven-cache
+    paths:
+      - .m2/repository
+  script:
+    - git clone https://github.com/Pathnex/sample-java-app.git
+    - cd sample-java-app
+    - mvn clean compile
+
+
+---------------------------------------------------------------------
+
+
