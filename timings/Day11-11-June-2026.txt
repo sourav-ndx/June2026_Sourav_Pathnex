@@ -1,0 +1,49 @@
+DAy 11 : Kubernetes Session 1 
+
+
+Todayw as the d ay 1 and intro of Kubernetes topics included 
+
+
+1. KUNERNETES : Kubernetes is an opensource container orccestration platifrm used for automated managing , scaling and deployment of containerized applciation .
+
+2. Compnents : the kubernetes cluster is mainky divided into two blocks the Control Plane and the Data Plane .
+
+Control Plane : This sis the braon of the cluster ( Master nodes resides here ) & control how the cluster its traffic and data flows and begaves 
+
+DATA Plane : this is the muscle of the container
+
+
+1. ETCD : the sourc eof thruth , the key value pair db of k8 which stores data for the entire cluster and its present state of each and every component .
+2. KUBE CONTROLLER MANAGER : it manages al the controllers in k8 , and ensures the desired and the present state of the cluster is in sync
+3. KUBE API SERVER - this is the door to the cluster , all sommands user interacts with kl8 are communicated via the kube api server , even different k8 cluster components used kube api server to talk to each other
+ 
+4. KUBE PROXY : it manages the networking of the clusters , the handling of IP TABLES  and providing identity to pods services and core dns resolution , traffic traversal are all partof the kube proxy .
+
+DNS resolution is handled by COreDNS component .
+
+5.KUBE SCHEDULELR - Once a Pod spec is applied , the job of scheduller si to analyze scan the requirment and idetify and make ready as which node would be used to host the pod , it goes through the s=requirements and decides the node that a pod would be scheduled on
+ 
+6. KUBELET : itsthe node caption , and runs om every worker node , it spins up the containers by inviking the container engine ( crio - cpntainerd ) and spins
+ up the pod , its responsible to see the pod is healthy upa nd running and logs this to the etcd , also provides ttl to the  control plane denoting the node i
+s healthy
+
+7. Continer Engine : crio & container d now , it s the main engine which is responsible to oull images and spin up the containers in the pods as per the spec
+supplied .
+
+
+---------------------------------------
+
+Deployment : The contrler used to manage deploy and scale pods in k8 .
+
+PODS : the smallest deployable entity of k8 . Inside each pod one or many pods runs .
+
+Sateful Set : its used to deploy stateful application . Each pods in STS gets a dedicated PVC . The pods gets name in incremental order stating from 0 .
+while delting the pods gets deleted in reverse order 4,3,2,1
+
+Daemon Set : 1 pod runs on each node .
+
+----------------------------
+
+TOMORRROW : will continue with k8 on EKS 
+
+
