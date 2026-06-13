@@ -1,0 +1,176 @@
+MODULE 1 : ANSIBLE 
+
+This module writes an Ansible code which checks a file , and automatically create a configuration file with multi-line text content .
+
+- name : create a config file on all servers
+  host: all
+  become: yes
+  
+  tasks:
+    -  name: Write content of a file
+       copy:
+         dest: /etc/pathnex.conf
+         content: |
+           Welcome to Daily Devosp tasks
+           today i am learning to peint multi line file in Ansible script 
+
+
+
+
+This module will execute and copy the file pathnex.conf from /etc/ in every run it will check if the file is there and the multi line contecnt is exactly the sam eor not , if not it will copy and put that , if its there it will come out without error .
+
+
+
+
+-------------------------------------------------------------------------------------------------------------------
+
+MODULE 2 : Terraform 
+
+- In this module we are creating an RDS instance in AWS and describing all its measurement as what would be the values of thatg RDS isntance .
+
+resource "aws_db_instance" "SouravRDS" {
+  allocated_storage   = 20
+  engine              = mysql
+  instance_class      = "db.t3.micro"
+  name                = "sourav_db"
+  username            = "admin"
+  password            = "password123"
+  skip_final_snapshot = true
+
+}
+
+------------------------------------------------------------------------------------------
+
+MODULE 3 : KUNERNETES 
+
+In this kubernetes deployment yaml , a rolling upgrade strategy is being added in the deployment yaml  , 
+
+the upgrade type is rolling upgrade 
+
+number of replicas is 3
+
+maxunavailabe is 1 , that emans at a time only 1 ( out of 3 ) can be upgraded to new versiona nd not be online , once its upgraded and live , next will be upgraded , so at a time 2 pods will always be there
+
+maxsurge is 1 , which means at a time onyl 1 additional pods with the new verison can be spinned up .
+
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pathnex-rolling
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: roll
+  template:
+    metadata:
+      labels:
+        app: roll
+    spec:
+      containers:
+        - name: web
+          image: nginx
+
+
+
+
+--------------------------------------------------------------------------------------------------------------
+
+MODULE 4 :
+
+A shell sctip to take backup of a directory :
+
+#!/bin/bash
+
+SOURCE="/var/log"
+DEST="/backup/pathnex-$(date +%F).tar.gz"
+
+tar -czf $DEST $SOURCE
+echo "Backup created at: $DEST"
+
+
+---
+
+the source folder is being zipped with the tar -czf command , and is stored ins the DEST fodler vlaue , the file is getting saved at DESTw with the date of the system is appende dint he filename.
+
+
+---------------------------------------------------------------------------------------------------
+
+MODULE 5 : JENKINS
+
+pipeline {
+    agent any
+    environment {
+        INSTITUTE_NAME = "Pathnex"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'mvn clean compile'
+            }
+        }
+    }
+}
+
+----------------------------------------------------------------------------------------
+
+MODULE 5 :  GITLAB CICD :
+
+This job module shows how we can seggregate jobs based on GIT branch , there are two seperate moduke of a JOB , but theya re part of a same JOB stage . Wither of the jib will get triggered based on the ONLY condition specified . 
+
+At a time in thiscode with the ONLY = DEV will be TRUE or ONLY = MAIN will be true , hence either of the job will run .
+
+stages:
+  - build
+
+build-main:
+  stage: build
+  image: maven:3.8.1-jdk-17
+  script:
+    - mvn clean compile
+  only:
+    - main
+
+build-dev:
+  stage: build
+  image: maven:3.8.1-jdk-17
+  script:
+    - mvn clean compile
+  only:
+    - dev
+
+
+---
+
+the Build main JOn in stage BUild will get executed when the mode commit is done from the main branch and the pipeline is triggered
+
+the build-dev will be triggered if a commit and merge is done on the dev branch .
+
+This setup achieves strict code isolation and resource optimization
+
+t prevents unnecessary server compute costs by running the build verification strictly on the specific branch that received the update.
+
+---------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------
+
+

@@ -1,0 +1,23 @@
+Kubernetes Session Day 2
+
+
+Today learned about some additional concepts of Kubernetes and was introduction to EKS 
+
+
+EKS stands for ELastic kubernetes service - Its the offering oto run kubernetes cluster 
+
+
+
+Intro to some modules of k8 : Deployment , Pods , Containers , Multi container pods ,
+
+Understanding the dtails of STS , Daemon Sets and Deployment .
+
+Some infor on schedulling and writing yamls and the details .
+
+How to apply yaml files 
+
+
+TOMORROW Proceed with with IN REAL DEPLOYMENT OF K8 in EKS .
+
+
+------------------------------------------------------------------------------------------------------------ 
