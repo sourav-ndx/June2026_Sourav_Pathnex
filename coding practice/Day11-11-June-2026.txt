@@ -1,0 +1,157 @@
+MODUE 1 : Ansible 
+
+This Ansible Module is meant to Install Maria Db and Start in on the host Server
+
+-name: Install & start maria DB
+ hosts: all
+ become: yes
+ 
+ tasks:
+   - name: Install Maria DB
+     yum:
+       name: mariadb-server
+       state: present
+   - name: Start Maria DB Server
+     service:
+        name: mariadb
+        state: started 
+        present: yes
+
+the playbook is called Install & start Maria DB , two modules one to isntall MAria db - used the YUM module & see that if the rpm is not ther einstall it
+
+Next module is Service - the name is mariadb means which service to start . Service module is used to handle service management modules like service or systemctl
+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+MODULE 2 : TERRAFORM :
+
+This module wants to display a terraform module and display the public iP of th eisntance post the deployment .
+
+resource "aws_instance" "PathnexServer" {
+ami =     "ami-0abcd1234abcd1234"
+instance_type = "r5.2xlarge"
+
+
+tage = {
+  Name = "Pathnex-Outpur-EC2"
+}
+
+}
+
+output "PathnexPublicIP" {
+value = aws_instance.ApthnexServer.public_ip
+}
+
+In the resouce module we are declaring the resouce we want to create and its spec , like an aws_isntance of name pathnexserver ,using the specified AMi and the of the specific instance type
+
+also we are adding a tag to this resouce .
+
+In the output section we re mention what out put we want to be displayed , so we need form the awsinstance.pathnexserver(name of the instance).public_ip(the ting we want )
+
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+
+ODULE 3 : KUBERNETES 
+
+
+here a multi contianer yaml pod is being spinned up , the pod has two containers .
+
+1 container is name main and the image is nginx , and another is sidecar the image is called busybox .
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pathnex-sidecar
+spec:
+  containers:
+    - name: main
+      image: nginx
+    - name: sidecar
+      image: busybox
+      command: ["sh", "-c", "echo Sidecar running; sleep 3600"]
+
+the second container is also running a shell command  echo sidecar running and then running sleep 3600 
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+MODULE 4 : SHell Script 
+
+This shell script make  use of a shell script , it creates a reusable function that prints a message on console whenever this is being executed .
+
+#!/bin/bash
+
+greet() {
+
+echo " Welcome"
+}
+
+greet // thr above creayed function is being called .
+
+-------------------------------------------------------------------------------------------
+
+MODULE 5 : Ansible :
+
+pipeline {
+    agent any
+    environment {
+        INSTITUTE_NAME = "Pathnex"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/Pathnex/sample-java-app.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+    }
+    post {
+        success {
+            mail to: 'team@pathnex.com',
+                 subject: "SUCCESS: Build #${env.BUILD_NUMBER}",
+                 body: "Build completed successfully for $INSTITUTE_NAME"
+        }
+        failure {
+            mail to: 'team@pathnex.com',
+                 subject: "FAILURE: Build #${env.BUILD_NUMBER}",
+                 body: "Build failed for $INSTITUTE_NAME"
+        }
+    }
+}
+
+----------------------------------------------------------------------------------------------
+
+
+MODULE 6 : GITLAB CICD 
+
+In this module we will learn , how we can incorporate the notification sending method in an CICD pipeline .
+
+stages:
+  - build
+
+build :
+  stage: build
+  image: maven:1.2
+  script :
+    - git clone https://github.com/Pathnex/sample-java-app.git
+    - cd sample-java-app
+    - mvn clean package
+  after_script:           // this module is used when we need to send notification or task to do after the actual script or job is run 
+    - echo "Sending notification email to nandy.sourav09@gmail.com"     // it runs a set of hook commands after our main script finishes.
+
+
+---------------------------------------------------------------------------------------------
+
+
+
+
+
+
