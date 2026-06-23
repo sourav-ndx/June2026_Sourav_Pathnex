@@ -1,0 +1,5 @@
+Its day 13 of the course and day 2 of the kubernetes deep dive session.
+
+Today was the session deep dive on EKS , the kubernetes by AWS
+
+

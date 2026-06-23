@@ -1,0 +1,59 @@
+DAY 2 Learning :
+
+Today i learned about Terraform 
+
+Terraform is a IAC , infrastructure as Code tool , used to create , deply and verison Infrastrures . I learned it by pairing it with AWS and creating resources on AWS .
+
+1. Installed Terraform on my MAchine .
+
+2. Created a User with Admin prviledge , and conencted my local with AWS CLI using that account for Terrraform to use it and create resources . I used the User Acces key to integrate them as usual .
+
+3. Terraform connects to AWS or any other cloud via plugins , these PLUGINS are called PROVIDERS in Terraform .
+
+4. For that we create a file TERRAFORM.tf in our working terrform folder and copy the code given in AWS TErraform Provider , ( search that in internet ) .
+
+5. terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0"
+    }
+  }
+}
+
+# Configure the AWS Provider
+provider "aws" {
+  region = "us-east-1"
+}
+
+# Create a VPC
+#resource "aws_vpc" "example" {
+#  cidr_block = "10.0.0.0/16"
+#}
+
+
+paste this in the terraform.tf file and hit init .
+
+5. there are multipple stages but major are the 3 stages , terraform init , terraform plan , terraform apply
+
+6. Terrform Init - it initializes the env and and updates it with our latest codes and changes .
+
+7. Terraform plan - It reads your current code and compares it against the Terraform state file (the records of what already exists) and the actual cloud infrastructure (refreshing the state). It then outputs a preview of the exact actions it will take (create, update, or destroy). 
+
+8. Terraform APPPLY - this is where it really goes in to the cloud provider and createss the required resources it neeeds for us . Pos that it updates the STate file back with the current updates list . Here it applies the changes in the cloud of all the resources it listed abobe ib plan stage .
+
+
+9. TERRAFORM STATE FILE - ( terraform.tfstate ) - this is a JSON file which scts as single source of truth for TERRAform . This acts s the brain of terraform . Here it bridges our human readable terrform code and the actual cloud infra and maps them both ,
+
+before plan - it reads the statefile and updates what it haves 
+after terraform plan - it checks the cloud infra and refreshes the state file with the actual updates and resync it w.r.t to the cloud infra and our code and hecne lists the iteams it needs to create or delete
+and during apply terraform performs those changes and updates the state file back s per the current status .
+
+ [Our Code ]  <--->  [ State File ]  <--->  [ Real Cloud Infrastructure ]
+
+10 . Terraform State contains sesitive info like secrets , object ID's etc hence should not be uploaded in GIT .
+
+10 . Psot this i worte some basic YAMLS to create some simple resources using Terraform like E2 
+
+
+
