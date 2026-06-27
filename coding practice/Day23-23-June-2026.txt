@@ -1,0 +1,150 @@
+
+Mdule 1 Ansible :
+
+In this ansible module we are seeing how to assign tags to user , or add comments to tasks
+It create a user name dev-user and adds the description .
+
+- name: Create users with comments
+  hosts: all
+  become: yes
+
+  tasks :
+    - name : Create pathnex uses //name of the job
+      user :
+        name: dev-user
+        comment : " Developer Team member
+
+------------------------------------------------------------------- 
+
+
+MODILE 2 :
+
+in this Terraform module i am assigning apublic sttaic ip to a ec2 instance in aws .
+
+resource "aws_eip" "PathnexEIP" {
+
+resource "aws_eip" "surav_pathnexeip" {
+  instance = aws_instance.sourav_pathnex_ec2.id
+  domain   = "vpc"
+
+
+  tags = {
+   
+    Name = "sourav_pathnex_eip"
+   }
+}
+}
+
+
+=====================================================
+
+MODULE 3 :
+
+Creating a HPA object in kunberbetes  , with max 6 and min2 replicas , its built on cu utilization and minitoring it on 60% .
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: pathnex-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: pathnex-deploy
+  minReplicas: 2
+  maxReplicas: 6
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
+
+
+====================================================================================
+
+Module 4 :
+
+Shell Script :
+
+
+In this SHELL script , I am chekcing the most CPU intensive process in the server and terminating it , using PS to get the process , sorting it by CPU% utilixationa nd printing the CPU used and then terminating it will KILL process .
+
+
+#!/bin/bash
+
+PID=$(ps aux --sort=-%cpu | awk 'NR==2{print $2}')
+
+echo "Killing process: $PID"
+kill -9 $PID
+
+
+======================================================================================
+
+MODULE 5 : ANSIBLE 
+
+pipeline {
+    agent any
+    environment {
+        INSTITUTE_NAME = "Pathnex"
+        TEAM = "DevOps"
+        ENV = "staging"
+        PROJECT = "WebApp"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/Pathnex/sample-java-app.git'
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                sh '''
+                docker build -t pathnex/webapp:${ENV}-${BUILD_NUMBER} \
+                --label "INSTITUTE_NAME=$INSTITUTE_NAME" \
+                --label "TEAM=$TEAM" \
+                --label "ENV=$ENV" \
+                --label "PROJECT=$PROJECT" .
+                '''
+            }
+        }
+    }
+}
+
+====================================================================================
+
+MODULE 5 : GITLAB CICD 
+
+In ths Gitlab CICD Script , written in Gitlab-CI YAML , this has a stage called docker-build , this stage when run will be used to build images out of backer file , there are certain variabkes stored in the codes , which willbe allgned in creating the image name and the variables are also used to label the image .
+
+Few imp highkight are the use of DOCKER - in - DOCKER commands ( services: - docker:dind ) , which uses the dicker commands inside a docker container we need this .
+
+Another is the dynamic tahhing of variables used in this code block 
+
+it adds Pipeline variables ( --label ) Metadata albels to the image .
+
+
+stages:
+- docker-build
+
+variables:
+ ENGINEER_NAME: "Sourav"
+ TEAM: "Devops"
+ ENV: "Staging"
+ PRPOJECT: "webapp"
+
+docker-build:
+  stage: docker-build
+  image: nodejs:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -t sourav/webapp:$ENV-${CI_PIPELINE_ID} \
+      --label "ENGINEER_NAME=$ENGINEER_NAME" \
+      --label "TEAM=$TEAM" \
+      --label "ENV=$ENV" \
+      --label "PROJECT=$PROJECT" .
+
+
+=================================================================================

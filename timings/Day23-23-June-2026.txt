@@ -1,0 +1,47 @@
+TODAYS LEarning ,
+
+
+Today we spent time lerning about Observability in Devops . What it means few common tools used ofr it and then deployed the same on an EKS cluster and did live trouble shooting 
+
+
+Observability is where we collectdata and metrics from the entire cluster , server or applications and then collect and plot them for monitoring , analysis , alerting , health check and other critical details .
+
+
+
+Lerned how its done in different environement like monitoring a k8 cluster from a VM  and also moniotring a VM from a cluster
+
+PROMETHEUS :
+
+Prometheus is a Time series DB , which stores metrics at certain time interval and stores in mumerical format .
+
+It works on a Pull mechanism , instead of servers sending this , it pulls data from the servers via HTTP endpoints .
+
+It uses metrics collectors like node exporters and kube-state-metrics agents to collects the data and conveert to a palin redable format and export them to prometheus via the HTTP API .
+
+┌──────────────────┐               HTTP GET /metrics               ┌───────────────────┐
+│                  │ ────────────────────────────────────────────> │   Node Exporter   │
+│    Prometheus    │                                               │ (Agent on Server) │
+│  (Central Server)│ <──────────────────────────────────────────── │   Port :9100      │
+└──────────────────┘             Plain-Text Metrics Data           └───────────────────┘
+
+Built-in Alertmanager: Evaluates user-defined rules and routes triggered alerts to Slack, PagerDuty, or email when things break.
+
+it runs on port 9090
+
+========================================================================================= 
+
+
+GRAFANA :
+
+GRAFANA is used for Displaying the data and display it in visual graphs . It connects with multiple databases liek prometheus , influxDB , cloudwatch etc and display their content . Its platform agnostic .
+
+It can merge different data sources and display them unified .
+
+It hs its own internal dn to manage users , permission , dashboard layout etc .
+
+it has community acess and we can input and intergrate many availbe dashboards and import and use them and also customize them .
+
+it runs on default port : 3000
+
+
+==================================================================
