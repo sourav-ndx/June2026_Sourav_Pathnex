@@ -1,0 +1,63 @@
+Today we learned about the ROLES and RESPONSIBLITIES Of  SRE 
+
+SRE stands for Site Reliability Engineer :
+
+Site Reliability Engineering (SRE) is a discipline created at Google that applies software engineering mindsets to infrastructure and operations problems. SREs build automated systems to manage, scale, and repair production applications rather than doing it manually.
+
+
+SLI (Service Level Indicator): A quantifiable metric showing how your service is performing right now.
+
+Real Use Case: The percentage of HTTP responses from your checkout API that return status code 200 OK in under 200 milliseconds.
+
+
+SLO (Service Level Objective): The internal target performance level your team agrees to meet. It defines the goal for your SLI.
+Real Use Case: "Our checkout API availability SLI must be at least 99.9% over any rolling 30-day window 
+
+SLA (Service Level Agreement): The legal or financial contract with your paying customers detailing what happens if you miss the SLO.
+
+Real Use Case: "If our system availability drops below 99.9% this month, we will refund 10% of your subscription cost."
+
+
+-------------------
+
+Key SRE Operations Concepts & Use Cases
+
+Incident Prioritization
+The process of ranking a production issue based on its impact (how many users/systems are broken) and urgency (how fast it causes business damage) to decide what gets fixed first. 
+
+Real Use Case: A payment gateway crash preventing all checkouts is marked as a P1 (Critical Impact). A broken font or misaligned logo on the profile page is marked as a P4 (Low Impact). SREs drop everything for P1s but schedule P4s for regular working hours. 
+
+Zero-Day Vulnerabilities 
+A newly discovered software security flaw that is unknown to the vendor, meaning there are "zero days" available to patch it before hackers can exploit it. 
+
+Real Use Case: A security researcher finds a flaw in an open-source logging library that allows total server takeover. Because no official patch exists yet, SREs must immediately implement emergency firewall rules or configuration workarounds to block traffic targeting that specific flaw. 
+
+
+RCA (5 Whys)
+
+Root Cause Analysis (RCA) is a post-incident problem-solving technique. You state the problem, then ask "Why?" five consecutive times to dig past symptoms and find the absolute root human, process, or system failure.
+Real Use Case (The checkout system failed):
+Why? The database ran out of disk space.
+Why? A debug logging file grew too large.
+Why? A developer left debug mode turned on in production.
+Why? There was no automated code check to flag debug modes during deployment.
+Why? The team rushed the last release and skipped updating the deployment pipeline rules. 
+
+
+Toil Automation
+
+Toil is manual, repetitive, tactical work that scales linearly with service size and has no long-term value (e.g., manually restarting a server when it runs out of memory). SREs write code to automate these tasks away, aiming to spend at least 50% of their time on engineering. 
+Real Use Case: Instead of an engineer waking up at 2:00 AM every night to clear temporary log folders on a disk, an SRE writes a script triggered by a Prometheus alert that automatically cleans the directory when disk usage hits 85%. 
+
+
+Cold vs. Hard Freeze
+
+Code freezes control production risk during critical business periods by restricting what developers can deploy. 
+Cold Freeze: Normal feature deployments are paused, but critical security patches, bug fixes, or minor optimization changes are still allowed.
+Real Use Case: A retail company introduces a cold freeze one week before Black Friday to stop new experimental features from breaking the site, while still allowing last-minute performance tweaks. 
+Hard Freeze: Absolute lockdown of production. No code changes, infrastructure updates, or configuration adjustments are permitted under any circumstance unless it is a total site outage emergency.
+Real Use Case: The same retail company shifts to a hard freeze during Black Friday weekend itself. The code is completely locked down to guarantee total environmental stability during peak traffic. 
+
+
+
+===============================================================
