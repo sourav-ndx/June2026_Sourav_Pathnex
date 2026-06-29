@@ -1,0 +1,131 @@
+MODULE 1 : ANSIBLE 
+
+
+In this I am installing and starint services on a linux sever , imp part of the code snippet is optimizing the isntallation of passing the services directly in yum module so everythung gets isntalled in a single click .
+
+Next imp concept i used here was intalling via the LOOP , where i am using a single SERVICE module to isntall both services by passing in the name: "{{ item }}"
+
+ - name: Install and Enbale services
+   hosts: all
+   become: yes
+
+   tasks:
+   - name: Install Services
+     yum:
+       name:
+       - httpd
+       - firewalld
+       state: present
+
+   - name: Enbale the services
+     services:
+       name: "{{item}}"
+       state: present
+       enable: yes
+     loop:
+       - httpd
+       - firewalld
+
+
+======================================================================================================
+
+MODULE 2 :
+
+  TERRAFORM MODLE TO CREATE A ROUTE53 OBJECT IN AWS
+
+
+resource "aws_route53_record" "SouravRecord" {
+  zone_id = "Z1234567890"
+  name    = "app.sourav.com"
+  type    = "A"
+  ttl     = 300
+  records = [aws_eip.PathnexEIP.public_ip]
+}
+
+=================================================================================================
+
+MODULE 3 : 
+
+  KBERNETES - In this module the code written is creating a initicontainer . this container start before the main contaiers , does the assigned tasks and closes & then the main container starts .
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sourav-init
+spec:
+  initContainers:
+    - name: setup
+      image: busybox
+      command: ["sh", "-c", "echo Initializing; sleep 10"]
+  containers:
+    - name: main
+      image: nginx
+
+
+
+=================================================================================================
+
+
+
+MODULE 4 :
+
+In this small shell scrit , I am printig the system info by printing the the server hostname , then the server uptime and the IP of the server , using the respective linux command .
+
+
+#!/bin/bash
+
+echo "Hostname: $(hostname)"
+echo "Uptime: $(uptime)"
+echo "IP: $(hostname -I)"
+
+
+
+================================================================================================
+
+MODULE 5 : JENKINS
+
+pipeline {
+    agent any
+    environment {
+        INSTITUTE_NAME = "Pathnex"
+        TEAM = "DevOps"
+    }
+    parameters {
+        string(name: 'ENVIRONMENT', defaultValue: 'dev', description: 'Deployment Environment')
+    }
+    stages {
+        stage('Deploy') {
+            steps {
+                sh 'echo "Deploying $INSTITUTE_NAME app to $ENVIRONMENT for $TEAM team"'
+            }
+        }
+    }
+}
+
+================================================================================================
+
+
+MODULE 6 : GITLAB CI-CD
+
+In this Gitlab CI i am wring few variables and calling them dynamically on the job stage . there is 1 job stage called deploy and is being used to , simulates a Deployment and registers a live GitLab Environment mapped dynamically to the current Git branch name, providing a clickable deployment tracking URL
+
+stages:
+  - deploy
+
+variables:
+  - ENGINEER_NAME: "SOURAV"
+  - TEAM: "DEVOPS"
+
+deploy:
+  stage: deploy
+
+  image: alpine
+  environament:
+    name: $CI_COMMIT_REF_NAME
+    url: http://$CI_COMMIT_REF_NAME.nandy.com
+  scripts:
+    - echo "Deploying $ENGINEER_NAME app to $CI_COMMIT_REF_NAME for $TEAM team"
+
+
+=============================================================================================
