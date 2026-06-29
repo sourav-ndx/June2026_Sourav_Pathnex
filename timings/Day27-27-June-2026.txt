@@ -1,0 +1,35 @@
+
+This sessionw as on the security aspect of Communication and use of SSL & TLS 
+
+Whay i learned , primarily what is SSL & TLS .
+
+SSL (Secure Sockets Layer) is an older cryptographic protocol but it is now deprecated due to security vulnerabilities.
+TLS (Transport Layer Security) is the modern, highly secure successor to SSL that encrypts internet traffic and authenticates server identities today.
+
+
+TLS does a 3 way handshake , which means , The client and server perform a "handshake" to authenticate the server's identity using a digital certificate. They then agree on a temporary, unique session key to encrypt all data moving between them
+
+
+Whats are self signed and CA signed certs , so self signed are the ones which we generate ouerselves , can be used in DEV and Non prod setup . CA certs are provided by Authorized Certificate Authorities like Digecert . Usually its paid and acts as a vlaidated entity for using in securing connections and handshake .
+
+OPENSSSL commands are used to genrate certificates .
+
+Workflow is
+
+openssl  to generate certififcate  ---   generate csr -->  generate key --->  generate certificate
+
+in K8s secrets are usually managed by the SECRETS , later these secrets are called at the pod or deployment level . When cert expires the secrets needs to be updated and same would get updated at the deployment level ( either via manual restart rollout or autimatically ) .
+
+
+Kind of ways to mount secrets in deployment or pod 
+
+As env variables like with  Config maps 
+
+as volumes via secrets ( best 1 )
+
+.
+
+these are also used by INGRESS to help with the TLS termination at ingress level if required .
+
+
+======================================================================
