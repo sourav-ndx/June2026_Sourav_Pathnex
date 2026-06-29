@@ -1,0 +1,110 @@
+MODULE 1 : Ansible 
+
+- name: Install Nginx
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Install Nginx
+      yum:
+        name: nginx
+        state: present
+
+
+
+In this I am isntallig NGINX on all hosts listed on the host file . I am doing this with an elevated permission
+I am using the YUM module to do it and ensuring that the RPM is present post install .
+
+
+==============================================================================================
+
+MODULE 2 : TERRAFORM
+
+resource "aws_s3_bucket" "s3_bucket_creation_module" {
+  bucket = "sourav-backup-s3"
+
+  tags = {
+    Name        = "sourav-backup-bucket"
+    Environment = "Dev"
+  }
+}
+
+
+
+In this simple code i am creating a s3 bucket in AWS .
+
+
+================================================================================================
+
+MODULE 3 : KUBERNETES
+
+This minimal yaml code creates a POD . It create a POD named brokenpod uses an nginx image .
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: brokenpod
+spec:
+  containers:
+  - name: app
+    image: nginx
+
+
+=================================================================================================
+
+MODULE 4 : JENKINS
+
+
+pipeline {
+    agent any
+    environment {
+        INSTITUTE_NAME = "Pathnex"
+        TEAM = "DevOps"
+        ENV = "prod"
+    }
+    stages {
+        stage('Deploy') {
+            steps {
+                script {
+                    try {
+                        sh 'echo "Deploying $INSTITUTE_NAME app in $ENV for $TEAM"'
+                        sh 'exit 1' // simulate failure
+                    } catch (Exception e) {
+                        echo "Deployment failed. Rolling back $INSTITUTE_NAME app in $ENV"
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+================================================================================================
+
+ MODULE 5 : GITLAB CICD
+
+
+IN THIS MODULE of GOTLAB CI , i am basically trying a failure scenario by EXIT 1 and then introduced aection of AFTER_SCRIPT .
+
+
+The AFTER_SCRIPT runs , irrepective of the previos is launched or 
+
+
+
+stages:
+  - deploy
+
+variables:
+  ENGINEER_NAME: "Sourav"
+  TEAM = "DevOps"
+  ENV = "prod"
+
+deploy:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - echo "Deploying $INSTITUTE_NAME app in $ENV for $TEAM"
+    - exit 1
+  after_script:
+    - echo "Deployment failed. Rolling back $INSTITUTE_NAME app in $ENV"
