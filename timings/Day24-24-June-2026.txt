@@ -1,0 +1,28 @@
+ Today we learned about ELK stahck .
+
+So Post prometheus , we learned about another imp stack in observability , the ELK stack .
+
+This is majorly used to help wit the Logs of different application s, it helps to centralize the logs of various  distributed  servers or clusters into 1 central location that helps in monitoring , amangemnt of logs and gather all details 
+
+ELS stands for ELasticSearch Logstash and KiBANA
+
+how it works , lets assime there a application server and one another server runing ELK 
+
+A small component called FILEBEAT  will be installed in each app server to collect logs from , it will just tail the log , read it from a location and forward it to the logstash server or component , it just reads and forwards .
+
+Next the log comes to 
+
+LOSGSTASH -- here the forarded logs are feed , its processed via logic written here by components called Grok , we can format it ,a dd or remove substance and basically transform it as required , here the log is transformed to a JSON output and sent to the next application  ElasticSearch
+
+ElasticSearch is the next module , its basically a JSON based search and indexing Engine , it stores the logs as Indices ,and goup them and stores them . it uses logic like reverse indexing to goup the log for fast retrival and storage . it uses the servers default storag to store them as flat files . also can be inegrated to othe rthing like s3 etc for storage .
+
+KIBANA - Kibana is the graphical interface to view nd interact with logs . It used to query and aggregate logs from different sources and display them . its disoplays data in real time and does not store so when a query is made it calls Elasticsearch and displays result in real time .
+
+
+Beats collects raw data from servers.
+
+Logstash filters, cleans, and structures it.
+
+Elasticsearch indexes and stores it for fast searching.
+
+Kibana visualises the results for human analysis.

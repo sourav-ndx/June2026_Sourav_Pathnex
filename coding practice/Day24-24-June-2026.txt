@@ -1,0 +1,174 @@
+--------------------------------------------------------
+
+MODULE 1 : ANSIBLE
+
+- name: Deploy on Servers Template
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Create config
+      template:
+         src: sourav.conf.j2
+         dest: /etc/sourav_server.conf
+
+In this ANsible module i am copying a file kept on  my local machine and applying the tempate across all hosts , in orde to do this i am attainign root via the become yes command .
+
+--------------------------------------------------------
+
+MODULE 2 : TERRAFORM
+
+In this terrraform module i created a AWS LB listener , which listenern on port 80 and HTTP traffic and ofrwards it to the LB . 
+the default block is a demo block used to send static invite out of 200ok , thi si used for testing and debugging and sends a fixed respond out for incoming traffic . 
+
+
+resource "aws_lb_listener" "sourav_lb_listener" {
+  load_balancer_arn = aws_lb.app_alb.arn  #links to the ALB above
+  port              = "80"
+  protocol          = "HTTP"
+  
+  default_action {
+    type               = "fixed_response"
+    fixed_response {
+      content_type     = "test/plain"
+      message_body     = "Sourav ALB Demo Running"
+      status_code      = "200"
+
+    }
+ }
+
+}
+
+==============================================================================================
+
+
+MODULE 3 : KUBERNETES 
+
+In this kubernetes code block I am creating a Persitent volume and then using that to create a Persistent Volumen claim . The acces mode is ReadWriteOnce - attaching this PV or being able to MOUNT to ony 1 NODE at a time , and the host data is written in the path /sourav/pvc on the disk attached to that node .
+
+
+the PV has 1Gi of cpapcity and the PVC is claiming a capacity of 500Mi from it .
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: sourav-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /data/pvpath
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sourav-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+
+
+==================================================================================================
+
+MODULE 4 : SHELL SCRIPT 
+
+#!/bin/bash
+
+echo "1) Show date"
+echo "2) Show uptime"
+echo "3) Show users"
+
+read -p "Choose option: " opt
+
+case $opt in
+  1) date ;;
+  2) uptime ;;
+  3) who ;;
+  *) echo "Invalid choice" ;;
+esac
+
+
+
+In hsi shell script , i am creating a simple interactive web module with 3 statements , when the script is run it displays 3 options and based on the selection it shows either uptime , date or  users .
+
+it uses a case condition and the default is when any other option is selscted is runn .
+
+
+================================================================================================
+
+MODULE 5 :  JENKINS
+
+pipeline {
+    agent any
+    environment {
+        INSTITUTE_NAME = "Pathnex"
+        TEAM = "QA"
+        ENV = "dev"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/Pathnex/sample-java-app.git'
+            }
+        }
+        stage('Unit Test') {
+            steps {
+                sh 'mvn test -Dgroup=unit'
+            }
+        }
+        stage('Integration Test') {
+            steps {
+                sh 'mvn verify -Dgroup=integration'
+            }
+        }
+        stage('Report') {
+            steps {
+                sh 'echo "Tests completed for $INSTITUTE_NAME by $TEAM in $ENV environment"'
+            }
+        }
+    }
+}
+========================================================================================
+
+MODULE 6 : GITLAB CICD 
+
+In this module i am rnning a 2 step GITLAB CICD pipeline , what I am doing is running a Maven Test in the 1st job stage called UNIT ( for unit test )
+
+and doing a Integration test for the second Job stage called Integration .
+
+this is a  sequential job runing in isolated docker images .
+
+
+stages:
+  - unit-test
+  - integration
+
+variables:
+  ENGINEER_NAME: "Sourav"
+  TEAM: "QA"
+  ENV: "DEV"
+
+unit-test:
+  stage: unit-test
+  image: maveb:3.8.1-jdk-17
+  script:
+    - mvn test -Dgroup=unit
+    - echo "Unit tests completed for $ENGINEER_NAME by $TEAM in $ENV"
+
+integration-test:
+  stage: integration
+  image: maven:3.8.1-jdk-17
+  script:
+    - mvn verify -Dgroup=integration
+    - echo "Integration tests completed for $ENGINEER_NAME by $TEAM in $ENV"
+
+
+-============================================================
+
+
