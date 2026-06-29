@@ -1,0 +1,139 @@
+MODULE 1 : ANSIBLE 
+
+- name: Update SSH COnfig of SOurav Server
+  host: all
+  become: yes
+
+  tasks:
+    - name: Disable root login
+      lineinfile :
+        path: /etc/ssh/sshd_config
+        regexp: "^PermitRootLogin"
+        line: "PermitRootLogin no"
+
+
+In this ansible playbook I used the use of LINEINFILE Module , This module acts like a smart text editor. Instead of copying over an entire file, it targets a single specific line based on a regular expression (regexp). If it finds a match, it updates it; if it doesn't find a match, it adds our line to the bottom of the file .
+
+
+
+=================================================================================
+
+MODULE 2 : TERRAFORM
+
+resource "aws_key-pair" "SouravKeyPair" {
+
+key_name = "Souravkey"
+public_key = file("`/.ssh/id_rsa.pub")
+}
+
+output "Pathnex_Key_name" {
+
+value = aws_key_pair.SouravKey.key_name }
+
+
+
+In this module , i am writing a .tf filter in order to create a aws_key_pair and for this i am uploading the key downloaded into my local ( users under AWS IAM ) .
+
+
+
+==============================================================================
+
+
+MODULE 3 : KUBERNETES
+
+In this code block i am creating a multi contianer POD in kubernetes , there are two container 1st of image nginex and the contiane rname is app , 2nd is of image busybox and contianer name is log writer . In the second container i am also printing a shell command and message to echo the log entry and then sleepp for 5 seconds .
+
+The pod is called sourav-sidecar .
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: sourav-sidecar
+spec:
+  containers:
+    - name: app
+      image: nginx
+    - name: log-writer
+      image: busybox
+      command: ["sh", "-c", "while true; do echo log entry; sleep 5; done"]
+
+
+
+========================================================================================
+
+MODULE 4 : Shell script 
+
+
+in this shell script i am executing commands to count the number of file sin the directory , i am listing all files and doinf WORD-COUNT to see the number of files .
+
+#!/bin/bash
+
+DIR="/var/log"
+
+COUNT=$(ls $DIR | wc -l)
+
+echo "Total files in $DIR: $COUNT"
+
+
+=====================================================================================
+
+MODULE 5 : JENKINS
+
+pipeline {
+    agent any
+    environment {
+        INSTITUTE_NAME = "Pathnex"
+        TEAM = "DevOps"
+        ENV = "staging"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/Pathnex/sample-java-app.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh '''
+                if [ -d ".m2" ]; then
+                    echo "Using cached dependencies for $INSTITUTE_NAME in $ENV by $TEAM"
+                else
+                    mvn clean compile
+                fi
+                '''
+            }
+        }
+    }
+}
+
+===================================================================================
+
+MODULE 6 : GITLAB CICD 
+
+In this code block i am running a Build stage and have few variables listed . it has a build stage and runs a maven built . In this mainly i have used a caching block that caches a lister directory and files into a created cahe i am creating dynamically during runtime .
+
+
+
+
+
+
+stages:
+  - build
+
+variables:
+  ENGINEER_NAME: "Sourav"
+  TEAM: "DevOps"
+  ENV: "staging"
+
+build:
+  stage: build
+  image: maven:3.8.1-jdk-17
+  cache:
+    key: "${ENV}-maven-cache"  // using cache - create a box named staging(env value)-maven-cache
+    paths:
+      - .m2/repository  // this generated folder is saved in the above box to be used for future runs 
+  script:
+    - mvn clean compile
+    - echo "Cached dependencies for $INSTITUTE_NAME in $ENV by $TEAM"
+
+=========================================================================================

@@ -1,0 +1,31 @@
+ Today we learned about KAFKA 
+
+KAFKA is used for EVEnt and Message streaming . 
+
+Main components are 
+
+Producers: The applications that send data to Kafka (e.g., a web server logging user clicks).
+
+Consumers: The applications that read data from Kafka (e.g., a database saving those clicks).
+
+Topics: The folders or categories where data is sorted (e.g., a topic named user-logins or payment-transactions).
+Brokers: The actual servers running Kafka that store and manage the topics.
+
+
+
+A group of one or more Kafka servers (Brokers) working together for scalability and fault tolerance is called a CLUSTER 
+
+Topic: A logical stream of data (like a database table, but append-only).
+
+Partition: Topics are divided into unchangeable ordered sequences called partitions.Partitions are the secret to Kafka’s speed.They allow a single topic to be split across multiple brokers for parallel processing.
+
+Offset: 
+A unique sequential integer assigned to each message within a partition.It acts like a bookmark.Consumers use offsets to keep track of which messages they have already read.
+
+
+
+
+
+
+
+
