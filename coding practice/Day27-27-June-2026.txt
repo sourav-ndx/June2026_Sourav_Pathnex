@@ -1,0 +1,124 @@
+Module 1 ; Ansible
+
+In this module I am using a Copy function to copy a certain file froma source location to destination on all servers , ia m taking super user priviledge to do so ,
+
+The Power of remote_src: yes: By default, the copy module looks on our local laptop or control node for the src file. Setting this parameter to yes tells Ansible to look for the folder directly on the target server's own local disk. This is perfect for taking local backups or moving logs inside the machine
+
+
+- name: Copy Sourav  files
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Copy directory
+      copy:
+        src: /opt/file_sourav/
+        dest: /backup/file_sourav/
+        remote_src: yes
+
+
+====================================================================================
+
+MODULE 2 : tERRAFORM
+
+In this Terrraform Module I am creating a EBSVolume and then attching that with an EC2 instance using EBSVOLUME ATTACHMENT module , so two modules are there , 1st create aEBS volumne and then use its id and a EC@'s id ( to accach to) and attach them via a ebs voume attach id .
+
+
+
+
+resource "aws_ebs_volume" "sourav_ebs_volume" {
+  availability_zone = "us-west-2a"
+  size              = 40
+
+  tags = {
+    Name = "sourav-ebs-volume-pathnex"
+  }
+}
+
+
+resource "aws_volume_attachment" "sourav_ebs_att" {
+  device_name = "/dev/sdh"
+  volume_id   = aws_ebs_volume.sourav_ebs_volume.id
+  instance_id = aws_instance.sourav_web_server.id
+}
+
+
+=================================================================================
+
+MODULE 3 : KUBERNETES
+
+This code snippet I amc reating a NODE PORT TYPE Service , assignning it a highrnag port of 30080 and lalbeling it with a label sourav-web so it can get my web pod acched to it .
+
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sourav-web-nodeport
+spec:
+  type: NodePort
+  selector:
+    app: sourav-web
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30080
+
+
+
+=========================================================================================
+
+MODULE 4 : SHELL SCRIPT
+
+In this small shell script , I am finding and removing all files older than 7 days , any sucn files willl be removed .
+
+
+#!/bin/bash
+
+find /var/log -type f -mtime +7 -exec rm -f {} \;
+
+echo "Old logs removed."
+
+
+
+=====================================================================================
+
+
+MODULE 5 : Jenkins
+
+node {
+    def envName = "dev"
+    env.INSTITUTE_NAME = "Pathnex"
+    env.TEAM = "DevOps"
+
+    stage('Checkout') {
+        git url: 'https://github.com/Pathnex/sample-java-app.git'
+    }
+
+    stage('Build') {
+        if (envName == "dev") {
+            sh 'echo "Building $INSTITUTE_NAME app in dev environment for $TEAM"'
+        } else {
+            sh 'echo "Skipping build for $envName"'
+        }
+    }
+
+    stage('Deploy') {
+        input message: "Approve deployment for $envName?"
+        sh 'echo "Deploying $INSTITUTE_NAME app to $envName for $TEAM team"'
+    }
+}
+
+
+============================================================================================
+
+
+
+
+
+
+
+
+
+
+
