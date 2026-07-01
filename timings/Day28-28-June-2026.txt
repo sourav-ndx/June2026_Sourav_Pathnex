@@ -1,0 +1,7 @@
+Learnt today about the JOB roles and responsiblities of an SRE , that is a SITE RELIABILITY ENGINEER .
+
+
+todays session was on SRE fundamentals , udrstood SLI,SLO,SLA . Also learned the menings of Incident Prioritization, Zero-Day Vulnerabilities, RCA (5 Whys), Toil Automation, and Cold vs. Hard Freeze via real use cases .
+
+
+
